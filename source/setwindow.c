@@ -13,10 +13,6 @@
 #include "Ezcard_OP.h"
 
 extern const unsigned char __attribute__((aligned(4)))gImage_SET[76800];
-extern u16 gl_select_lang;
-extern u16 gl_engine_sel;
-extern u16 gl_show_Thumbnail;
-extern u16 gl_ingame_RTC_open_status;
 
 u16 SET_info_buffer [0x200]EWRAM_BSS;
 
@@ -31,26 +27,25 @@ u16 SET_info_buffer [0x200]EWRAM_BSS;
 #define	K_R		   (8)
 #define	K_L		 	 (9)
 
-u8* str_A      = (u8*)"   A  ";
-u8*	str_B		   = (u8*)"   B  ";
-u8* str_SELECT = (u8*)"SELECT";
-u8*	str_START	 = (u8*)"START ";
-u8*	str_RIGHT	 = (u8*)"RIGHT ";
-u8*	str_LEFT	 = (u8*)" LEFT ";
-u8* str_UP		 = (u8*)"  UP  ";
-u8*	str_DOWN	 = (u8*)" DOWN ";
-u8* str_R		   = (u8*)"   R  ";
-u8* str_L		   = (u8*)"   L  ";
+static const u8* str_A      = "   A  ";
+static const u8* str_B      = "   B  ";
+static const u8* str_SELECT = "SELECT";
+static const u8* str_START  = "START ";
+static const u8* str_RIGHT  = "RIGHT ";
+static const u8* str_LEFT   = " LEFT ";
+static const u8* str_UP     = "  UP  ";
+static const u8* str_DOWN   = " DOWN ";
+static const u8* str_R      = "   R  ";
+static const u8* str_L      = "   L  ";
 
-
-u16 v_reset;
-u16 v_rts;
-u16 v_sleep;
-u16 v_cheat;
-u16 language_sel;	
-u16 engine_sel;
-u8 edit_sleephotkey[3]={0};
-u8 edit_rtshotkey[3]={0};
+static u16 v_reset;
+static u16 v_rts;
+static u16 v_sleep;
+static u16 v_cheat;
+static u16 language_sel;	
+static u16 engine_sel;
+static u8 edit_sleephotkey[3]={0};
+static u8 edit_rtshotkey[3]={0};
 
 static void Show_ver(void);
 static void save_set_info(void);

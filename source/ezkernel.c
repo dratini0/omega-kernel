@@ -44,26 +44,26 @@
 
 
 
-FM_FILE_FS pFilename_buffer[MAX_files]EWRAM_BSS;
+static FM_FILE_FS pFilename_buffer[MAX_files]EWRAM_BSS;
 FM_NOR_FS pNorFS[MAX_NOR]EWRAM_BSS;
-FM_Folder_FS pFolder[MAX_folder]EWRAM_BSS;
+static FM_Folder_FS pFolder[MAX_folder]EWRAM_BSS;
 
-FM_FILE_FS pFilename_temp;
+static FM_FILE_FS pFilename_temp;
 
 u32 FAT_table_buffer[FAT_table_size/4]EWRAM_BSS;
 u8 pReadCache [MAX_pReadCache_size]EWRAM_BSS;
 
-u8 p_recently_play[10][512]EWRAM_BSS;
-TCHAR currentpath_temp[MAX_path_len];
-TCHAR current_filename[200];
+static u8 p_recently_play[10][512]EWRAM_BSS;
+static TCHAR currentpath_temp[MAX_path_len];
+static TCHAR current_filename[200];
 
-u8 p_folder_select_show_offset[100]EWRAM_BSS;
-u8 p_folder_select_file_select[100]EWRAM_BSS;
-u32 folder_select;
+static u8 p_folder_select_show_offset[100]EWRAM_BSS;
+static u8 p_folder_select_file_select[100]EWRAM_BSS;
+static u32 folder_select;
 
-u32 game_total_SD;
+static u32 game_total_SD;
 u32 game_total_NOR;
-u32 folder_total;
+static u32 folder_total;
 
 u32 gl_currentpage;
 u32 gl_norOffset;
@@ -76,11 +76,11 @@ u16 gl_ingame_RTC_open_status;
 
 u8 __attribute__((aligned(4)))GAMECODE[4];
 
-FATFS EZcardFs;
-FILINFO fileinfo;
-DIR dir;
+static FATFS EZcardFs;
+static FILINFO fileinfo;
+static DIR dir;
 FIL gfile;
-u8 dwName;
+static u8 dwName;
 
 u16 gl_reset_on;
 u16 gl_rts_on;
@@ -1416,7 +1416,6 @@ u32 LoadEMU2PSRAM(TCHAR *filename,u32 is_EMU)
 	return 0;
 }
 //---------------------------------------------------------------------------------
-extern u16 SET_info_buffer [0x200]EWRAM_BSS;
 void save_set_info_SELECT(void)
 {
 	u32 address;

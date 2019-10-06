@@ -14,8 +14,7 @@
 #include "ezkernel.h"
 
 
-int current_y = 1;
-extern u8 pReadCache [MAX_pReadCache_size]EWRAM_BSS;
+static int current_y = 1;
 //******************************************************************************
 void Clear(u16 x, u16 y, u16 w, u16 h, u16 c, u8 isDrawDirect)
 {

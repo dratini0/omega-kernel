@@ -79,12 +79,17 @@ extern const unsigned char __attribute__((aligned(4)))gImage_MENU[28160];
 extern FM_NOR_FS pNorFS[MAX_NOR]EWRAM_BSS;
 extern u8 pReadCache [MAX_pReadCache_size]EWRAM_BSS;
 extern u8 __attribute__((aligned(4)))GAMECODE[4];
+extern u32 FAT_table_buffer[FAT_table_size/4]EWRAM_BSS;
 
 
 extern u16 gl_reset_on;
 extern u16 gl_rts_on;
 extern u16 gl_sleep_on;
 extern u16 gl_cheat_on;
+extern u16 gl_select_lang;
+extern u16 gl_engine_sel;
+extern u16 gl_show_Thumbnail;
+extern u16 gl_ingame_RTC_open_status;
 
 
 extern u16 gl_color_selected;
@@ -97,6 +102,12 @@ extern u16 gl_color_cheat_black;
 extern u16 gl_color_NORFULL;
 extern u16 gl_color_btn_clean;
 
+extern FM_NOR_FS pNorFS[MAX_NOR];
+extern u8 pReadCache [MAX_pReadCache_size];
+extern u32 gl_currentpage;
+extern u32 gl_norOffset;
+extern FIL gfile;
+extern u32 game_total_NOR;
 
 u32 IWRAM_CODE LoadRTSfile(TCHAR *filename);
 u32 IWRAM_CODE Loadfile2PSRAM(TCHAR *filename);

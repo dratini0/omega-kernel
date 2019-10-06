@@ -15,13 +15,6 @@
 #include "GBApatch.h"
 #define DEBUG
 
-extern FM_NOR_FS pNorFS[MAX_NOR]EWRAM_BSS;
-extern u8 pReadCache [MAX_pReadCache_size]EWRAM_BSS;
-extern u32 gl_currentpage;
-extern u32 gl_norOffset;
-extern FIL gfile;
-extern u32 game_total_NOR;
-extern u32 iTrimSize;
 //---------------------------------------------------------------
 void Chip_Reset()
 {

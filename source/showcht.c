@@ -12,23 +12,20 @@
 #include "setwindow.h"
 
 
-FM_CHT_LINE tmpCHTFS ;
+static FM_CHT_LINE tmpCHTFS ;
 
-u8 *pCHTbuffer = (u8*)(pReadCache + 0x2000); //patchbuffer
+static u8 *pCHTbuffer = (u8*)(pReadCache + 0x2000); //patchbuffer
 
 
-ST_entry pCHEAT[3000]EWRAM_BSS;
+ST_entry pCHEAT[MAX_CHEAT_COUNT]EWRAM_BSS;
 u32 gl_cheat_count;
 
-extern u16 gl_select_lang;
-
-u16 gl_color_chtBG    = RGB(4,8,0xC);
+static u16 gl_color_chtBG    = RGB(4,8,0xC);
 //------------------------------------------------------------------
 
 
-extern FIL gfile;
-u8 buf[MAX_BUF_LEN]EWRAM_BSS;
-char _paramv[MAX_BUF_LEN] EWRAM_BSS;
+static u8 buf[MAX_BUF_LEN]EWRAM_BSS;
+static char _paramv[MAX_BUF_LEN] EWRAM_BSS;
 
 static void Get_KEY_val(FIL* file,char*KEY_section,char*KEY_secval,char getbuff[]);
 static u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/);

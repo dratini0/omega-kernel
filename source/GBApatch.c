@@ -16,23 +16,22 @@
 #define	_UnusedVram 		0x06012c00
 
 
-u32 windows_offset;
-u32 is_NORpatch;
-u32 g_Offset;
-u32 is_Nes;
-u32 Nes_index;
-u32 Nes_index_17_patch;
+static u32 windows_offset;
+static u32 is_NORpatch;
+static u32 g_Offset;
+static u32 is_Nes;
+static u32 Nes_index;
+static u32 Nes_index_17_patch;
 u32 iTrimSize;
-u32 EA_offset;
+static u32 EA_offset;
 
-u32 w_reset_on;
-u32 w_rts_on;
-u32 w_sleep_on;
-u32 w_cheat_on;
+static u32 w_reset_on;
+static u32 w_rts_on;
+static u32 w_sleep_on;
+static u32 w_cheat_on;
 
-SPatchInfo2 iPatchInfo2[EMax];
-u32 iCount2;
-extern ST_entry pCHEAT[256];
+static SPatchInfo2 iPatchInfo2[EMax];
+static u32 iCount2;
 
 #define sizeofa(array) (sizeof(array)/sizeof(array[0]))
 

@@ -25,7 +25,6 @@ static void IWRAM_CODE SetSPIWrite(u16  control);
 static void IWRAM_CODE SPI_Write_Enable(void);
 static void IWRAM_CODE SPI_Write_Disable(void);
 
-extern FIL gfile;
 // --------------------------------------------------------------------
 #define FlashBase_S71		0x08000000
 
