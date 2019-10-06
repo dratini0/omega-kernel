@@ -97,11 +97,14 @@ extern u16 gl_color_cheat_black;
 extern u16 gl_color_NORFULL;
 extern u16 gl_color_btn_clean;
 
-u32 Setting_window(void);
-
 
 u32 LoadRTSfile(TCHAR *filename);
+u32 Loadfile2PSRAM(TCHAR *filename);
 void ShowTime(u32 page_num ,u32 page_mode);
-
+void delay(u32 R0);
+void CheckSwitch();
+void CheckLanguage();
+void wait_btn();
+u32 Check_game_save_FAT(TCHAR *filename,u32 game_save_rts);
 
 //#endif

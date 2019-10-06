@@ -21,5 +21,5 @@ void IWRAM_CODE Save_NOR_info(u8 * NOR_info_buffer,u32 buffersize);
 void IWRAM_CODE Save_SET_info(u16 * SET_info_buffer,u32 buffersize);
 void IWRAM_CODE Read_NOR_info();
 u16 IWRAM_CODE Read_SET_info(u32 offset);
-u32 Loadfile2PSRAM(TCHAR *filename);
 u16 IWRAM_CODE Read_FPGA_ver(void);
+void PatchInternal(u32* Data,int iSize,u32 offset);

@@ -67,7 +67,7 @@ u32 Check_RTS(TCHAR* gamefilename);
 u8 Check_mde_file(TCHAR* gamefilename);
 void Make_mde_file(TCHAR* gamefilename,u8 Save_num);
 
-void Patch_SpecialROM_sheepmode(void);
+void Patch_SpecialROM_sleepmode(void);
 u32 use_internal_engine(u8 gamecode[]);
 u32 Check_cheat_file(TCHAR *gamefilename);
 void SetTrimSize(u8* buffer,u32 romsize,u32 iSize,u32 mode,BYTE saveMODE);

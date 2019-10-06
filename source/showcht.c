@@ -28,6 +28,17 @@ u16 gl_color_chtBG    = RGB(4,8,0xC);
 extern FIL gfile;
 u8 buf[MAX_BUF_LEN]EWRAM_BSS;
 char _paramv[MAX_BUF_LEN] EWRAM_BSS;
+
+static void Get_KEY_val(FIL* file,char*KEY_section,char*KEY_secval,char getbuff[]);
+static u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/);
+static u32 Get_all_Section_val(FIL* file);
+static void Show_KEY_val(u32 total,u32 Select,u32 showoffset);
+static unsigned long str2hex(unsigned char*str);
+static void Analyze_KEYVAL(FIL* file,u32 total);
+static u32 Check_count(u32 all_count);
+static unsigned char HexToChar(unsigned char bChar)  ;
+static u32 Change2cht_folder(u32 chtname);
+static void Show_num(u32 totalcount,u32 select);
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 void Trim(char s[])

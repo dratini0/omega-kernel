@@ -20,6 +20,7 @@
 #include "lang.h"
 #include "GBApatch.h"
 #include "showcht.h"
+#include "setwindow.h"
 
 #include "images/splash.h"
 #include "images/SD.h"
@@ -96,6 +97,35 @@ u16 gl_color_cheat_count  = RGB(00,31,00);
 u16 gl_color_cheat_black  = RGB(00,00,00);
 u16 gl_color_NORFULL      = RGB(31,00,00);
 u16 gl_color_btn_clean    = RGB(00,00,31);
+
+int main(void);
+static u32 get_count(void);
+static u32 Check_file_type(TCHAR *pfilename);
+static u32 Load_Thumbnail(TCHAR *pfilename_pic);
+static u32 LoadEMU2PSRAM(TCHAR *filename,u32 is_EMU);
+static u32 Loadsavefile(TCHAR *filename);
+static u32 SavefileWrite(TCHAR *filename,u32 savesize);
+static u32 show_recently_play(void);
+static u8 Check_saveMODE(u8 gamecode[]);
+static void Filename_loop(u32 shift,u32 show_offset,u32 file_select,u32 haveThumbnail);
+static void Get_file_size(u32 num,char*str);
+static void init_FAT_table(void);
+static void Make_recently_play_file(TCHAR* path,TCHAR* gamefilename);
+static void Refresh_filename_NOR(u32 show_offset,u32 file_select,u32 updown);
+static void Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbnail);
+static void save_set_info_SELECT(void);
+static void SD_list_L_START(u32 show_offset, u32 file_select, u32 folder_total);
+static void Show_error_num(u8 error_num);
+static void Show_game_name(u32 total,u32 Select);
+static void Show_game_num(u32 count,u32 list);
+static void Show_help_window();
+static void Show_ICON_filename_NOR(u32 show_offset,u32 file_select);
+static void Show_ICON_filename(u32 show_offset,u32 file_select,u32 haveThumbnail);
+static void Show_MENU_btn();
+static void Show_MENU(u32 menu_select,PAGE_NUM page,u32 havecht,u32 Save_num,u32 is_menu);
+static void Sort_file(u32 game_total_SD);
+static void Sort_folder(u32 folder_total);
+
 //******************************************************************************
 void delay(u32 R0)
 {
@@ -1221,7 +1251,7 @@ void CheckLanguage(void)
 	{
 		LoadEnglish();
 	}
-	else//ÖÐÎÄ
+	else//ï¿½ï¿½ï¿½ï¿½
 	{
 		LoadChinese();
 	}
@@ -1400,7 +1430,7 @@ void save_set_info_SELECT(void)
 }
 //---------------------------------------------------------------------------------
 //Sort folder
-void Sort_folder(folder_total)
+void Sort_folder(u32 folder_total)
 {
 	u32 ret;
 	u32 i;
@@ -1424,7 +1454,7 @@ void Sort_folder(folder_total)
 }
 //---------------------------------------------------------------------------------
 //Sort file 
-void Sort_file(game_total_SD)
+void Sort_file(u32 game_total_SD)
 {
 	u32 ret;
 	u32 i;
@@ -1475,7 +1505,7 @@ u32 Load_Thumbnail(TCHAR *pfilename_pic)
 }
 //---------------------------------------------------------------------------------
 //Delete file
-void SD_list_L_START(show_offset,file_select,folder_total)
+void SD_list_L_START(u32 show_offset, u32 file_select,u32 folder_total)
 {
 	u32 res;
 	

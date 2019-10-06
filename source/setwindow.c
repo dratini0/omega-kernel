@@ -5,6 +5,7 @@
 #include <gba_input.h>
 
 
+#include "setwindow.h"
 #include "lang.h"
 #include "ezkernel.h"
 #include "RTC.h"
@@ -50,6 +51,10 @@ u16 language_sel;
 u16 engine_sel;
 u8 edit_sleephotkey[3]={0};
 u8 edit_rtshotkey[3]={0};
+
+static void Show_ver(void);
+static void save_set_info(void);
+
 //---------------------------------------------------------------------------------
 void Show_ver(void)
 {
