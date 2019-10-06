@@ -98,8 +98,8 @@ extern u16 gl_color_NORFULL;
 extern u16 gl_color_btn_clean;
 
 
-u32 LoadRTSfile(TCHAR *filename);
-u32 Loadfile2PSRAM(TCHAR *filename);
+u32 IWRAM_CODE LoadRTSfile(TCHAR *filename);
+u32 IWRAM_CODE Loadfile2PSRAM(TCHAR *filename);
 void ShowTime(u32 page_num ,u32 page_mode);
 void delay(u32 R0);
 void CheckSwitch();

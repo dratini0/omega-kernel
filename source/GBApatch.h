@@ -56,6 +56,7 @@ extern void Fire_Emblem_iQue_patch_end(void);
 extern u32 gl_cheat_count;
 
 
+void IWRAM_CODE PatchInternal(u32* Data,int iSize,u32 offset);
 void GBApatch_Cleanrom(u32* address,int filesize);
 void GBApatch_PSRAM(u32* address,int filesize);
 

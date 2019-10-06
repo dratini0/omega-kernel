@@ -4,13 +4,13 @@
 
 @;--------------------------------------------------------------
 	.code 16
-	.global	SoftReset_now
-SoftReset_now:
+	.global	SoftReset_now_iwram
+SoftReset_now_iwram:
 	ldr r1,=SoftReset_now16
 	bx  r1
 	.code 32
 SoftReset_now16:
-	adr r1,SoftReset
+	adr r1,SoftReset_iwram
 	adr r3,SoftReset_end
 	mov r2,#0x02000000
 	add r2,#0x1000 @;533
@@ -22,7 +22,7 @@ copy_loop:
 
 	mov		r2,#0x3000000
 	@;add		r3,r2,#0x1000
-	ldr		r3,=SoftReset_now
+	ldr		r3,=SoftReset_now_iwram
 	mov		r0,#0
 clearL:
 	str		r0,[r2],#+4
@@ -44,13 +44,13 @@ clearL2:
 @----------------------------------------------
 	.code 16
 
-	.global RegisterRamReset
-RegisterRamReset:
+	.global RegisterRamReset_iwram
+RegisterRamReset_iwram:
 	swi		1
 	bx		lr	
 @----------------------------------------------	
-	.global	SoftReset
-SoftReset:
+	.global	SoftReset_iwram
+SoftReset_iwram:
 		ldr		r3, =0x04000208
 		mov		r2, #0
 		str		r2, [r3, #0]
@@ -80,8 +80,8 @@ SoftReset:
 	@swi		0
 
 @----------------------------------------------
-	.global	HardReset
-HardReset:
+	.global	HardReset_iwram
+HardReset_iwram:
 	ldr		r3, =0x04000208
 	mov		r2, #0
 	str		r2, [r3, #0]

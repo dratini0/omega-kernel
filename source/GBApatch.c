@@ -11,6 +11,7 @@
 #include "reset_table.h"
 #include "lang.h"
 #include "showcht.h"
+#include "Ezcard_OP.h"
 
 #define	_UnusedVram 		0x06012c00
 
@@ -42,9 +43,9 @@ static void Add2(u32 anOffset, u32 aValue);
 static void Write(u32 romaddress, const u8* buffer, u32 size);
 
 static void Check_Fire_Emblem(void);
-static void CheckNes(u32 *Data);
+static void IWRAM_CODE CheckNes(u32 *Data);
 
-static bool PatchDragonBallZ(u32 *Data);
+static bool IWRAM_CODE PatchDragonBallZ(u32 *Data);
 static bool PatchNes(u32 *Data);
 static void Patch_B_address(void);
 static void Patch_Reset_Sleep(u32 *Data);
@@ -92,7 +93,7 @@ void Write(u32 romaddress, const u8* buffer, u32 size)
 	}
 }
 //------------------------------------------------------------------
-bool IWRAM_CODE PatchDragonBallZ(u32 *Data)
+bool PatchDragonBallZ(u32 *Data)
 {
   bool res=false;
 	const u32 game_codes_DragonBallZ[]=
@@ -199,7 +200,7 @@ bool IWRAM_CODE PatchDragonBallZ(u32 *Data)
   return res;
 }
 //------------------------------------------------------------------
-void IWRAM_CODE CheckNes(u32 *Data)
+void CheckNes(u32 *Data)
 {
   u32 jump=Data[0];
   if((jump&0xff000000)==0xea000000)
@@ -259,7 +260,7 @@ void Add2(u32 anOffset, u32 aValue)
 	} 
 }
 //------------------------------------------------------------------
-void IWRAM_CODE PatchInternal(u32* Data,int iSize,u32 offset)
+void PatchInternal(u32* Data,int iSize,u32 offset)
 {
   u32 search_size=iSize/4;
   g_Offset = offset/4;
@@ -407,7 +408,7 @@ void Patch_Reset_Sleep(u32 *Data)
   u32 Return_address_offset = p_patch_Return_address_L-p_patch_start;
 
   dmaCopy((void*)p_patch_start,patchbuffer, p_patch_end-p_patch_start);
-  *(vu32*)(patchbuffer+Return_address_offset) = Return_address;//�޸�gba_sleep_patch_bin����ķ��ص�ַ
+  *(vu32*)(patchbuffer+Return_address_offset) = Return_address;//�޸�gba_sleep_patch_bin����ķ��ص�ք1�7
 
 	u16 read5 = Read_SET_info(5); 
 	u16 read6 = Read_SET_info(6); 

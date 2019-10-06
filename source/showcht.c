@@ -9,6 +9,7 @@
 #include "ezkernel.h"
 #include "showcht.h"
 #include "draw.h"
+#include "setwindow.h"
 
 
 FM_CHT_LINE tmpCHTFS ;

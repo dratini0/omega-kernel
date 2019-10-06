@@ -1,6 +1,5 @@
 #include <gba_video.h>
 #include <gba_interrupt.h>
-#include <gba_systemcalls.h>
 #include <gba_input.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,12 +7,23 @@
 #include <gba_dma.h>
 #include <string.h>
 
-
+#include "Ezcard_OP.h"
 #include "ezkernel.h"
 #include "draw.h"
 #include "Newest_FW_ver.h"
+#include "reset.h"
 extern u32 FAT_table_buffer[FAT_table_size/4]EWRAM_BSS;
-u32 crc32(unsigned char *buf, u32 size);
+static u32 crc32(unsigned char *buf, u32 size);
+static void IWRAM_CODE SetSDControl(u16  control);
+static void IWRAM_CODE SD_Read_state(void);
+static u16 IWRAM_CODE SD_Response(void);
+static u32 IWRAM_CODE Wait_SD_Response();
+static void IWRAM_CODE  SetbufferControl(u16  control);
+static void IWRAM_CODE Save_info(u32 info_offset, u8 * info_buffer,u32 buffersize);
+static void IWRAM_CODE SetSPIControl(u16  control);
+static void IWRAM_CODE SetSPIWrite(u16  control);
+static void IWRAM_CODE SPI_Write_Enable(void);
+static void IWRAM_CODE SPI_Write_Disable(void);
 
 extern FIL gfile;
 // --------------------------------------------------------------------
@@ -24,7 +34,7 @@ extern FIL gfile;
 
 
 // --------------------------------------------------------------------
-void IWRAM_CODE SetSDControl(u16  control)
+void SetSDControl(u16  control)
 {
 	*(u16 *)0x9fe0000 = 0xd200;
 	*(u16 *)0x8000000 = 0x1500;
@@ -34,27 +44,27 @@ void IWRAM_CODE SetSDControl(u16  control)
 	*(u16 *)0x9fc0000 = 0x1500;
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SD_Enable(void)
+void SD_Enable(void)
 {
 	SetSDControl(1);
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SD_Read_state(void)
+void SD_Read_state(void)
 {
 	SetSDControl(3);
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SD_Disable(void)
+void SD_Disable(void)
 {
 	SetSDControl(0);
 }
 // --------------------------------------------------------------------
-u16 IWRAM_CODE SD_Response(void)
+u16 SD_Response(void)
 {
 	return *(vu16 *)0x9E00000; 
 }
 // --------------------------------------------------------------------
-u32 IWRAM_CODE Wait_SD_Response()
+u32 Wait_SD_Response()
 {
 	vu16 res;
 	u32 count=0;
@@ -76,7 +86,7 @@ u32 IWRAM_CODE Wait_SD_Response()
 	}	
 }
 // --------------------------------------------------------------------
-u32 IWRAM_CODE Read_SD_sectors(u32 address,u16 count,u8* SDbuffer)
+u32 Read_SD_sectors(u32 address,u16 count,u8* SDbuffer)
 {
 	SD_Enable();
 	
@@ -115,7 +125,7 @@ u32 IWRAM_CODE Read_SD_sectors(u32 address,u16 count,u8* SDbuffer)
 	return 0;
 }
 // --------------------------------------------------------------------
-u32 IWRAM_CODE Write_SD_sectors(u32 address,u16 count, u8* SDbuffer)
+u32 Write_SD_sectors(u32 address,u16 count, const u8* SDbuffer)
 {
 	SD_Enable();
 	SD_Read_state();
@@ -143,7 +153,7 @@ u32 IWRAM_CODE Write_SD_sectors(u32 address,u16 count, u8* SDbuffer)
 	return 0;
 }
 // --------------------------------------------------------------------
-u16 IWRAM_CODE Read_S71NOR_ID()
+u16 Read_S71NOR_ID()
 {
 	u16 ID1;
 	*((vu16 *)(FlashBase_S71)) = 0xF0;	
@@ -166,7 +176,7 @@ u16 Read_S98NOR_ID()
 	return ID1;
 }	
 // --------------------------------------------------------------------
-void IWRAM_CODE SetRompage(u16 page)
+void SetRompage(u16 page)
 {
 	*(vu16 *)0x9fe0000 = 0xd200;
 	*(vu16 *)0x8000000 = 0x1500;
@@ -176,7 +186,7 @@ void IWRAM_CODE SetRompage(u16 page)
 	*(vu16 *)0x9fc0000 = 0x1500;
 }
 // --------------------------------------------------------------------
-void  IWRAM_CODE SetbufferControl(u16  control)
+void  SetbufferControl(u16  control)
 {
 	*(u16 *)0x9fe0000 = 0xd200;
 	*(u16 *)0x8000000 = 0x1500;
@@ -186,7 +196,7 @@ void  IWRAM_CODE SetbufferControl(u16  control)
 	*(u16 *)0x9fc0000 = 0x1500;
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SetPSRampage(u16 page)
+void SetPSRampage(u16 page)
 {
 	*(vu16 *)0x9fe0000 = 0xd200;
 	*(vu16 *)0x8000000 = 0x1500;
@@ -196,7 +206,7 @@ void IWRAM_CODE SetPSRampage(u16 page)
 	*(vu16 *)0x9fc0000 = 0x1500;
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SetRampage(u16 page)
+void SetRampage(u16 page)
 {
 	*(vu16 *)0x9fe0000 = 0xd200;
 	*(vu16 *)0x8000000 = 0x1500;
@@ -207,7 +217,7 @@ void IWRAM_CODE SetRampage(u16 page)
 }
 // --------------------------------------------------------------------
 // --------------------------------------------------------------------
-void IWRAM_CODE Send_FATbuffer(u32*buffer,u32 mode)
+void Send_FATbuffer(u32*buffer,u32 mode)
 {	
 	SetbufferControl(1);
 	dmaCopy(buffer,(void*)0x9E00000, 0x400);
@@ -239,32 +249,23 @@ void IWRAM_CODE Send_FATbuffer(u32*buffer,u32 mode)
 	}
 	SetbufferControl(0);		
 }
-// --------------------------------------------------------------------
-#define	RESET_EWRAM		  (1<<0)	/*!< Clear 256K on-board WRAM			*/
-#define	RESET_IWRAM		  (1<<1)	/*!< Clear 32K in-chip WRAM				*/
-#define	RESET_PALETTE		(1<<2)	/*!< Clear Palette						*/
-#define	RESET_VRAM 	    (1<<3)	/*!< Clear VRAM							*/
-#define	RESET_OAM		 	  (1<<4)	/*!< Clear OAM							*/
-#define	RESET_SIO		 	  (1<<5)	/*!< Switches to general purpose mode	*/
-#define	RESET_SOUND		 	(1<<6)	/*!< Reset Sound registers				*/
-#define	RESET_OTHER		 	(1<<7)	/*!< all other registers				*/
-// --------------------------------------------------------------------
+
 extern u16 gl_ingame_RTC_open_status;
 
-void IWRAM_CODE SetRompageWithHardReset(u16 page,u32 bootmode)
+void SetRompageWithHardReset(u16 page,u32 bootmode)
 {
 	Set_RTC_status(gl_ingame_RTC_open_status);
 	SetRompage(page);
-	RegisterRamReset(RESET_EWRAM|RESET_PALETTE| RESET_VRAM|RESET_OAM |RESET_SIO | RESET_SOUND | RESET_OTHER);
+	RegisterRamReset_iwram(RESET_EWRAM|RESET_PALETTE| RESET_VRAM|RESET_OAM |RESET_SIO | RESET_SOUND | RESET_OTHER);
 	if(bootmode==1){
-		HardReset();
+		HardReset_iwram();
 	}
 	else{
-		SoftReset_now();
+		SoftReset_now_iwram();
 	}
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE ReadSram(u32 address, u8* data , u32 size )
+void ReadSram(u32 address, u8* data , u32 size )
 {
 	register int i ;
 	for(i=0;i<size;i++)
@@ -273,14 +274,14 @@ void IWRAM_CODE ReadSram(u32 address, u8* data , u32 size )
 	}
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE WriteSram(u32 address, u8* data , u32 size )
+void WriteSram(u32 address, u8* data , u32 size )
 {
 	register int i ;
 	for(i=0;i<size;i++)
 		*(vu8*)(address+i)=data[i];
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE Bank_Switching(u8 bank)
+void Bank_Switching(u8 bank)
 {
 	*((vu8 *)(SAVE_sram_base+0x5555)) = 0xAA ;
 	*((vu8 *)(SAVE_sram_base+0x2AAA)) = 0x55 ;
@@ -288,7 +289,7 @@ void IWRAM_CODE Bank_Switching(u8 bank)
 	*((vu8 *)(SAVE_sram_base+0x0000)) = bank ;	
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE Save_info(u32 info_offset, u8 * info_buffer,u32 buffersize)
+void Save_info(u32 info_offset, u8 * info_buffer,u32 buffersize)
 {
 	u32 offset;
 	vu16* buf = (vu16*)info_buffer ;
@@ -334,17 +335,17 @@ void IWRAM_CODE Save_info(u32 info_offset, u8 * info_buffer,u32 buffersize)
 	*((vu16 *)(FlashBase_S71)) = 0xF0;	
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE Save_NOR_info(u8 * NOR_info_buffer,u32 buffersize)
+void Save_NOR_info(u8 * NOR_info_buffer,u32 buffersize)
 {
 	Save_info(NOR_info_offset, NOR_info_buffer,buffersize);
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE Save_SET_info(u16 * SET_info_buffer,u32 buffersize)
+void Save_SET_info(u16 * SET_info_buffer,u32 buffersize)
 {
 	Save_info(SET_info_offset, SET_info_buffer,buffersize);
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE Read_NOR_info()
+void Read_NOR_info()
 {
 	register u32 loopwrite ;
 	for(loopwrite=0;loopwrite<sizeof(FM_NOR_FS)*0x40;loopwrite++)
@@ -353,12 +354,12 @@ void IWRAM_CODE Read_NOR_info()
 	}
 }
 // --------------------------------------------------------------------
-u16 IWRAM_CODE Read_SET_info(u32 offset)
+u16 Read_SET_info(u32 offset)
 {
 	return *((vu16 *)(FlashBase_S71+SET_info_offset+offset*2));
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SetSPIControl(u16  control)
+void SetSPIControl(u16  control)
 {
 	*(u16 *)0x9fe0000 = 0xd200;
 	*(u16 *)0x8000000 = 0x1500;
@@ -368,17 +369,17 @@ void IWRAM_CODE SetSPIControl(u16  control)
 	*(u16 *)0x9fc0000 = 0x1500;
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SPI_Enable(void)
+void SPI_Enable(void)
 {
 	SetSPIControl(1);
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SPI_Disable(void)
+void SPI_Disable(void)
 {
 	SetSPIControl(0);
 }
 // --------------------------------------------------------------------
-u16 IWRAM_CODE Read_FPGA_ver(void)
+u16 Read_FPGA_ver(void)
 {
 	u16 Read_SPI;
 	SPI_Enable();	
@@ -387,7 +388,7 @@ u16 IWRAM_CODE Read_FPGA_ver(void)
 	return Read_SPI;
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SetSPIWrite(u16  control)
+void SetSPIWrite(u16  control)
 {
 	*(u16 *)0x9fe0000 = 0xd200;
 	*(u16 *)0x8000000 = 0x1500;
@@ -397,17 +398,17 @@ void IWRAM_CODE SetSPIWrite(u16  control)
 	*(u16 *)0x9fc0000 = 0x1500;
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SPI_Write_Enable(void)
+void SPI_Write_Enable(void)
 {
 	SetSPIWrite(1);
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE SPI_Write_Disable(void)
+void SPI_Write_Disable(void)
 {
 	SetSPIWrite(0);
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE Set_RTC_status(u16  status)
+void Set_RTC_status(u16  status)
 {
 	*(u16 *)0x9fe0000 = 0xd200;
 	*(u16 *)0x8000000 = 0x1500;
@@ -417,7 +418,7 @@ void IWRAM_CODE Set_RTC_status(u16  status)
 	*(u16 *)0x9fc0000 = 0x1500;
 }
 // --------------------------------------------------------------------
-void IWRAM_CODE Set_AUTO_save(u16  mode)
+void Set_AUTO_save(u16  mode)
 {
 	*(u16 *)0x9fe0000 = 0xd200;
 	*(u16 *)0x8000000 = 0x1500;
@@ -428,7 +429,7 @@ void IWRAM_CODE Set_AUTO_save(u16  mode)
 }
 // --------------------------------------------------------------------
 
-void IWRAM_CODE Check_FW_update(u16 Current_FW_ver,u16 Built_in_ver)
+void Check_FW_update(u16 Current_FW_ver,u16 Built_in_ver)
 {
 	vu16 busy;
 	vu32 offset;

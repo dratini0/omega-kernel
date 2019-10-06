@@ -102,8 +102,8 @@ int main(void);
 static u32 get_count(void);
 static u32 Check_file_type(TCHAR *pfilename);
 static u32 Load_Thumbnail(TCHAR *pfilename_pic);
-static u32 LoadEMU2PSRAM(TCHAR *filename,u32 is_EMU);
-static u32 Loadsavefile(TCHAR *filename);
+static u32 IWRAM_CODE LoadEMU2PSRAM(TCHAR *filename,u32 is_EMU);
+static u32 IWRAM_CODE Loadsavefile(TCHAR *filename);
 static u32 SavefileWrite(TCHAR *filename,u32 savesize);
 static u32 show_recently_play(void);
 static u8 Check_saveMODE(u8 gamecode[]);
@@ -112,7 +112,7 @@ static void Get_file_size(u32 num,char*str);
 static void init_FAT_table(void);
 static void Make_recently_play_file(TCHAR* path,TCHAR* gamefilename);
 static void Refresh_filename_NOR(u32 show_offset,u32 file_select,u32 updown);
-static void Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbnail);
+static void IWRAM_CODE Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbnail);
 static void save_set_info_SELECT(void);
 static void SD_list_L_START(u32 show_offset, u32 file_select, u32 folder_total);
 static void Show_error_num(u8 error_num);
@@ -338,7 +338,7 @@ void Show_ICON_filename(u32 show_offset,u32 file_select,u32 haveThumbnail)
 	}
 }
 //---------------------------------------------------------------------------------
-void IWRAM_CODE Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbnail)
+void Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbnail)
 {
 	u32 need_show_game;
 	u32 need_show_folder;
@@ -1054,7 +1054,7 @@ u32 Check_game_save_FAT(TCHAR *filename,u32 game_save_rts)
 	return 0;
 }
 //---------------------------------------------------------------------------------
-u32 IWRAM_CODE Loadsavefile(TCHAR *filename)
+u32 Loadsavefile(TCHAR *filename)
 {
 	UINT ret;
 	UINT filesize;
@@ -1094,7 +1094,7 @@ u32 IWRAM_CODE Loadsavefile(TCHAR *filename)
   }
 }
 //---------------------------------------------------------------------------------
-u32 IWRAM_CODE LoadRTSfile(TCHAR *filename)
+u32 LoadRTSfile(TCHAR *filename)
 {
 	UINT ret;
 	UINT filesize;
@@ -1184,7 +1184,7 @@ u8 Check_saveMODE(u8 gamecode[])
 	return savemode;
 }
 //---------------------------------------------------------------
-u32 IWRAM_CODE Loadfile2PSRAM(TCHAR *filename)
+u32 Loadfile2PSRAM(TCHAR *filename)
 {
 	UINT  ret;
 	u32 filesize;
@@ -1327,7 +1327,7 @@ void ShowTime(u32 page_num ,u32 page_mode)
 	DrawHZText12(msgtime,0,100,3,gl_color_text,1);
 }
 //---------------------------------------------------------------
-u32 IWRAM_CODE LoadEMU2PSRAM(TCHAR *filename,u32 is_EMU)
+u32 LoadEMU2PSRAM(TCHAR *filename,u32 is_EMU)
 {
 	UINT  ret;
 	u32 filesize;

@@ -11,6 +11,8 @@
 #include "ezkernel.h"
 #include "draw.h"
 #include "lang.h"
+#include "Ezcard_OP.h"
+#include "GBApatch.h"
 #define DEBUG
 
 extern FM_NOR_FS pNorFS[MAX_NOR]EWRAM_BSS;
@@ -166,7 +168,7 @@ void WriteFlash(u32 address,u8 *buffer,u32 size)
 	SetRompage(gl_currentpage);
 }
 //---------------------------------------------------------------
-void IWRAM_CODE WriteFlash_with32word(u32 address,u8 *buffer,u32 size)
+void WriteFlash_with32word(u32 address,u8 *buffer,u32 size)
 {
 	vu16 page,v1,v2;
 	register u32 loopwrite ;
