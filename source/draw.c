@@ -195,6 +195,7 @@ void DrawHZText12(const char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect
 	}
 }
 //---------------------------------------------------------------------------------
+#ifdef DEBUG
 void DEBUG_printf(const char *format, ...)
 {
 	char* str;
@@ -223,6 +224,7 @@ void DEBUG_printf(const char *format, ...)
 		current_y=1;
 	}
 }
+#endif
 //---------------------------------------------------------------------------------
 void ShowbootProgress(const char *str)
 {

@@ -14,9 +14,6 @@
 #define FAT_table_SAV_offset 0x200
 #define FAT_table_RTS_offset 0x300
 
-#define DEBUG
-
-
 #define VideoBuffer    (u16*)0x6000000
 #define Vcache         (u16*)pReadCache
 #define RGB(r,g,b) ((r)+(g<<5)+(b<<10))

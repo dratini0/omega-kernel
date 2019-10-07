@@ -78,8 +78,7 @@ u32 Wait_SD_Response()
 		count++;
 		if(count>0x100000)
 		{
-			//DEBUG_printf("time out %x",res);	
-			//wait_btn();
+			DEBUG_printf("time out %x",res);	
 			return 1;
 		}
 	}	
@@ -297,7 +296,7 @@ void Save_info(u32 info_offset, u8 * info_buffer,u32 buffersize)
 	
 	*((vu16 *)(FlashBase_S71)) = 0xF0 ;	
 	
-	offset= info_offset;//0x7A0000/0x7B0000 ;
+	offset= info_offset;
 	
 	*((vu16 *)(FlashBase_S71+0x555*2)) = 0xAA ;
 	*((vu16 *)(FlashBase_S71+0x2AA*2)) = 0x55 ;
@@ -436,16 +435,12 @@ void Check_FW_update(u16 Current_FW_ver,u16 Built_in_ver)
 	u32 line_x = 17;
 	char msg[100];
 
-	//DEBUG_printf("Current_FW_ver %x ",Current_FW_ver);	
+	DEBUG_printf("Current_FW_ver %x ",Current_FW_ver);	
 	Clear(0, 0, 240, 160, RGB(0,18,24), 1);
 	
 	u32 get_crc32 = crc32( newomega_top_bin, newomega_top_bin_size);
-	//DEBUG_printf("get_crc32 %x ",get_crc32);
+	DEBUG_printf("get_crc32 %x ",get_crc32);
 	
-	//if(	get_crc32 != 0x22475DDC) //fw3
-	//if(	get_crc32 != 0xEE2DACE7) //fw4
-	//if(	get_crc32 != 0x5B6B5129) //fw5
-	//if(	get_crc32 != 0x7E6212AB) //fw6
 	if( get_crc32 != 0xEFD03788) //fw7
 	{
 			sprintf(msg,"check crc32 error!");		
@@ -510,8 +505,6 @@ void Check_FW_update(u16 Current_FW_ver,u16 Built_in_ver)
 					if(busy==0) break;
 				}
 				SPI_Write_Disable();
-				//DEBUG_printf("count %x ",count);
-				//break;								
 			}		
 			sprintf(msg,"update finished,power off manual");
 			DrawHZText12(msg,0,2,offset_Y+8*line_x, 0x7FFF,1);	

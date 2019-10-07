@@ -69,7 +69,7 @@ void Write(u32 romaddress, const u8* buffer, u32 size)
 			for(x=0;x<size/2;x++){
 				((vu16*)(pReadCache+romaddress-windows_offset))[x] = ((vu16*)buffer)[x];
 			}					
-			//DEBUG_printf("NORaddress{%x}:%x %x", romaddress,size ,((vu32*)buffer)[0]);			
+			DEBUG_printf("NORaddress{%x}:%x %x", romaddress,size ,((vu32*)buffer)[0]);			
 		}
 	}
 	else
@@ -85,9 +85,9 @@ void Write(u32 romaddress, const u8* buffer, u32 size)
 		SetPSRampage(page);
 		
 		for(x=0;x<size/2;x++)
-			((vu16*)(PSRAMBase_S98 + Address))[x] = ((vu16*)buffer)[x];//todo 锟斤拷要锟斤拷锟斤拷psram page
+			((vu16*)(PSRAMBase_S98 + Address))[x] = ((vu16*)buffer)[x];//todo also deal with psram page
 						
-		//DEBUG_printf("address{%x}:%x %x %x %x", romaddress,page,Address,size ,((vu32*)buffer)[0]);
+		DEBUG_printf("address{%x}:%x %x %x %x", romaddress,page,Address,size ,((vu32*)buffer)[0]);
 		SetPSRampage(0);
 	}
 }
@@ -274,7 +274,7 @@ void PatchInternal(u32* Data,int iSize,u32 offset)
     {
       case 0x3007FFC: // IRQ handler
         {
-          Add2(ii, 0x3007FF4);//0x3007FFC锟斤拷位锟斤拷
+          Add2(ii, 0x3007FF4);//address 0x3007FFC
         }
         break;
     }
@@ -331,7 +331,7 @@ void SetTrimSize(u8* buffer,u32 romsize,u32 iSize,u32 mode,BYTE saveMODE)
 			}
 	  }
   }
-	//DEBUG_printf("iTrimSize %08X ", iTrimSize);
+	DEBUG_printf("iTrimSize %08X ", iTrimSize);
 	if(mode ==1)//nor
 	{
 		if( ((iTrimSize&0x1FFFF)+PATCH_LENGTH)  > 0x20000)//Greater than one flash sector
@@ -407,7 +407,7 @@ void Patch_Reset_Sleep(u32 *Data)
   u32 Return_address_offset = p_patch_Return_address_L-p_patch_start;
 
   dmaCopy((void*)p_patch_start,patchbuffer, p_patch_end-p_patch_start);
-  *(vu32*)(patchbuffer+Return_address_offset) = Return_address;//锟睫革拷gba_sleep_patch_bin锟斤拷锟斤拷姆锟斤拷氐锟街�
+  *(vu32*)(patchbuffer+Return_address_offset) = Return_address;//modify gba_sleep_patch_bin return address
 
 	u16 read5 = Read_SET_info(5); 
 	u16 read6 = Read_SET_info(6); 
@@ -500,7 +500,7 @@ void Patch_RTS_Cheat(u32 *Data)
 			*(vu32*)(patchbuffer+cheat_offset+8*ii) = ((pCHEAT[ii].address)&0x3FFFF) + 0x2000000;	
 		}
 		*(vu32*)(patchbuffer+cheat_offset+8*ii+4) = pCHEAT[ii].VAL;	
-		//DEBUG_printf("%x=%x", *(vu32*)(patchbuffer+cheat_offset+8*ii),*(vu32*)(patchbuffer+cheat_offset+8*ii+4));
+		DEBUG_printf("%x=%x", *(vu32*)(patchbuffer+cheat_offset+8*ii),*(vu32*)(patchbuffer+cheat_offset+8*ii+4));
 	}
 
 	u32 copysize = p_no_cheat_end-p_patch_start ;
@@ -509,7 +509,7 @@ void Patch_RTS_Cheat(u32 *Data)
 	if(	iTrimSize+copysize > 0x2000000){
 		copysize = 0x2000000 - iTrimSize;
 	}
-	//DEBUG_printf("iTrimSize =%x %x", iTrimSize,copysize);
+	DEBUG_printf("iTrimSize =%x %x", iTrimSize,copysize);
 		
 	Write(iTrimSize, patchbuffer,copysize);
 }
@@ -553,7 +553,7 @@ void Patch_RTS_only(u32 *Data)
 	if(	iTrimSize+copysize > 0x2000000){
 		copysize = 0x2000000 - iTrimSize; //????
 	}
-	//DEBUG_printf("iTrimSize =%x %x", iTrimSize,copysize);
+	DEBUG_printf("iTrimSize =%x %x", iTrimSize,copysize);
 		
 	Write(iTrimSize, patchbuffer,copysize);
 }
@@ -590,7 +590,7 @@ u32 Get_spend_address(u32* Data)
   }
   if(ii == search_size) 
   {
-  	return 0;//Find_spend_address_SpecialROM(Data); 
+  	return 0;
   }
   
   u32 address;
@@ -599,7 +599,7 @@ u32 Get_spend_address(u32* Data)
 	else if (updown == 0x00100000)
 		address= ii*4 - offset+16;
   
-  if(	(Data[address/4] > 0x03007E80) /*|| (Data[address/4] == 0x03007E00)*/ || (Data[address/4] == 0x0203FFFC) )
+  if(	(Data[address/4] > 0x03007E80) || (Data[address/4] == 0x0203FFFC) )
   {
   	Data[address/4] = Data[address/4] - 0x80; 
   	return (Data[address/4]);
@@ -626,7 +626,7 @@ void GBApatch_PSRAM(u32* address,int filesize)//Only once
 	else if((gl_rts_on==1) ||  ((gl_cheat_on==1)&& (gl_cheat_count>0) ) )		
 	{
 		spend_address = Get_spend_address(address);
-		//DEBUG_printf("spend_address =%x",spend_address);
+		DEBUG_printf("spend_address =%x",spend_address);
 		Patch_RTS_Cheat(address);
 	}
 	else
@@ -753,7 +753,6 @@ u32 Check_pat(TCHAR* gamefilename)
 		{
 			find_the_patfile = 0;
 		}
-		//res=f_chdir("/");
 	}
 	else//no PATCH folder
 	{
@@ -983,8 +982,7 @@ u32 use_internal_engine(u8 gamecode[])
 	}	
 		
 	#ifdef DEBUG
-		//DEBUG_printf("%d: %X VS %X %x",i,((vu32*)pReadCache)[i],*(vu32*)gamecode,count0x3007FFC);
-		//wait_btn();	
+		DEBUG_printf("%d: %X VS %X %x",i,((vu32*)pReadCache)[i],*(vu32*)gamecode,count0x3007FFC);
 	#endif
 	i += 2;
 	iCount2 = 0;
@@ -1388,8 +1386,6 @@ void Check_Fire_Emblem(void)
 			code2[4]=Baseaddress+patchaddress+0x3D;
 		  p_patch_start = (u8*)Fire_Emblem_iQue_patch_start;
 		  p_patch_end  	= (u8*)Fire_Emblem_iQue_patch_end;
-		  //p_modify_address = (u8*)Modify_address_B;
-		  //modify_val = 0x80B670F;
 		  have = 1;
 		}break;
 	}

@@ -18,7 +18,6 @@ extern void Sleep_ReplaceIRQ_end(void);
 extern void Return_address_L(void);
 extern void Sleep_key(void);
 extern void Reset_key(void);
-//extern void Wakeup_key(void);
 
 
 extern void RTS_ReplaceIRQ_start(void);
@@ -26,7 +25,6 @@ extern void RTS_ReplaceIRQ_end(void);
 extern void RTS_Return_address_L(void);
 extern void RTS_Sleep_key(void);
 extern void RTS_Reset_key(void);
-//extern void RTS_Wakeup_key(void);
 extern void RTS_switch(void);
 extern void Cheat_count(void);
 extern void CHEAT(void);

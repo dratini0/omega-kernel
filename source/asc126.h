@@ -1,4 +1,4 @@
-//字库结构  12*8 ，高12，宽6 ，前6bit
+// Font structure: 12*8, Width: 12, Height: 6, upper 6bits used
 
 const unsigned char ASC_DATA[] = {
 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

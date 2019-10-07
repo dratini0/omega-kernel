@@ -145,8 +145,6 @@ void wait_btn()
 			break;
 		}
 	}
-	//while(*(vu16*)0x04000130 == 0x3FF );
-	//while(*(vu16*)0x04000130 != 0x3FF );
 }
 //---------------------------------------------------------------------------------
 void Show_help_window()
@@ -369,7 +367,6 @@ void Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbna
 		offset = show_offset - folder_total;
 
 	u16 name_color1;
-	//u16 name_color2;
 	u32 xx1;
 	u32 xx2;
 	u32 showy1;
@@ -456,7 +453,7 @@ void Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbna
 		ClearWithBG((u16*)gImage_SD,17, 20 + xx1*14, clean_len1, 13, 1);
 		Clear(17,20 + xx2*14,clean_len2,13,gl_color_selectBG_sd,1);
 	}
-	else// if(updown ==3)//up
+	else //up
 	{
 		xx1 = file_select;
 		xx2 = file_select+1;
@@ -585,7 +582,7 @@ void Refresh_filename_NOR(u32 show_offset,u32 file_select,u32 updown)
 		ClearWithBG((u16*)gImage_NOR,17, 20 + xx1*14, clean_len, 13, 1);
 		Clear(17,20 + xx2*14,clean_len,13,gl_color_selectBG_nor,1);
 	}
-	else //if(updown ==3)//up
+	else //up
 	{
 		xx1 = file_select;
 		xx2 = file_select+1;
@@ -780,7 +777,6 @@ void Show_MENU(u32 menu_select,PAGE_NUM page,u32 havecht,u32 Save_num,u32 is_men
 							break;			
 						
 					}
-					//ClearWithBG((u16*)gImage_MENU -64,60+60, y_offset + line*14, 10*6, 13, 1);
 					DrawHZText12(msg, 32, 60+54, y_offset + line*14, name_color,1);					
 				}
 			}
@@ -830,7 +826,6 @@ u32	get_count(void)
 		memset(buf,0x00,512);
 		while(f_gets(buf, 512, &gfile) != NULL)
 		{		
-			//DrawHZText12(buf, 32, 1+16, showy, name_color,1);
 			Trim(buf);
 			if(buf[0] != '/') break;
 			memset(p_recently_play[count],0x00,512);
@@ -920,7 +915,6 @@ void Make_recently_play_file(TCHAR* path,TCHAR* gamefilename)
 	int get=1;
 	char buf[512];	
 	
-	//res=f_chdir("/SAVER");
 	//is in SAVER
 	count = get_count();
 		
@@ -975,7 +969,6 @@ void Make_recently_play_file(TCHAR* path,TCHAR* gamefilename)
 //---------------------------------------------------------------------------------
 void init_FAT_table(void)
 {
-	//memset(FAT_table_buffer,0,0x200);
 	FAT_table_buffer[0] = 0x00000000;
 	CpuFastSet( FAT_table_buffer, FAT_table_buffer, FILL | (FAT_table_size/4));
 	FAT_table_buffer[2] = 0xFFFFFFFF;
@@ -999,8 +992,8 @@ u32 Check_game_save_FAT(TCHAR *filename,u32 game_save_rts)
 
 
 	#ifdef DEBUG
-		//DEBUG_printf("first clust %x;	sec=%x ",(&file)->obj.sclust,	ClustToSect(&EZcardFs,(&file)->obj.sclust)	);
-		//DEBUG_printf("fs->fs_type %x",(&EZcardFs)->fs_type);
+		DEBUG_printf("first clust %x;	sec=%x ",(&file)->obj.sclust,	ClustToSect(&EZcardFs,(&file)->obj.sclust)	);
+		DEBUG_printf("fs->fs_type %x",(&EZcardFs)->fs_type);
 	#endif
 	if((&EZcardFs)->fs_type == FS_FAT16)
 	{
@@ -1036,7 +1029,7 @@ u32 Check_game_save_FAT(TCHAR *filename,u32 game_save_rts)
 		cluster_num++;
 		if(getcluster != (getcluster_old+1)) {
 			#ifdef DEBUG
-				//DEBUG_printf("getcluster = %x",getcluster);
+				DEBUG_printf("getcluster = %x",getcluster);
 			#endif
 			*FAT_table_P = (cluster_num * (&EZcardFs)->csize);//sector_per_cluster
 			FAT_table_P++;
@@ -1249,7 +1242,7 @@ void CheckLanguage(void)
 	{
 		LoadEnglish();
 	}
-	else//����
+	else//Chinese
 	{
 		LoadChinese();
 	}
@@ -1529,7 +1522,6 @@ void SD_list_L_START(u32 show_offset, u32 file_select,u32 folder_total)
 u32 Check_file_type(TCHAR *pfilename)
 {
 	u32 strlen8 = strlen(pfilename) ;
-	//u32 is_EMU;
 	if(!strcasecmp(&(pfilename[strlen8-3]), "gba"))
 	{
 		return 0;
@@ -1680,8 +1672,7 @@ refind_file:
 			while(1)
 			{
 				res = f_readdir(&dir, &fileinfo);									 //read next
-				//DEBUG_printf("=%x %s %x %x",res, fileinfo.fname,fileinfo.fname[0],fileinfo.fattrib);
-				//wait_btn();								
+				DEBUG_printf("=%x %s %x %x",res, fileinfo.fname,fileinfo.fname[0],fileinfo.fattrib);
 				if (res != FR_OK || fileinfo.fname[0] == 0) break;
 
 				if(	(fileinfo.fattrib == AM_DIR) || (fileinfo.fattrib == 0x30))//DIR and exFAT dir
@@ -1791,8 +1782,7 @@ re_showfile:
 			if(updata==1){//reshow all
 				if(page_num==SD_list)
 				{
-					//DrawPic((u16*)gImage_SD, 0, 0, 240, 160, 0, 0, 1);	
-					ClearWithBG((u16*)gImage_SD,0, 0, 90, 20, 1);	//			
+					ClearWithBG((u16*)gImage_SD,0, 0, 90, 20, 1);
 					ClearWithBG((u16*)gImage_SD,185+6, 3, 6*3, 16, 1);//Show_game_num
 					ClearWithBG((u16*)gImage_SD,0, 20, 240, 160-20, 1);
 					Show_ICON_filename(show_offset,file_select,gl_show_Thumbnail&&is_GBA);
@@ -1817,15 +1807,12 @@ re_showfile:
 					DrawPic((u16*)gImage_HELP, 0, 0, 240, 160, 0, 0, 1);
 					Show_help_window();
 					DrawPic((u16*)gImage_SET, 0, 0, 240, 160, 0, 0, 1);
-					page_num = SET_win;//	
+					page_num = SET_win;
 					goto re_showfile;
 				}
 				else
 				{				
 					DrawPic((u16*)gImage_NOR, 0, 0, 240, 160, 0, 0, 1);
-					//ClearWithBG((u16*)gImage_NOR,0, 0, 90, 20, 1);	//			
-					//ClearWithBG((u16*)gImage_NOR,185+6, 3, 6*7, 16, 1);
-					//ClearWithBG((u16*)gImage_NOR,0, 20, 240, 160-20, 1);
 					Show_ICON_filename_NOR(show_offset,file_select);							
 				}
 				Show_game_num(file_select+show_offset+1,page_num);
@@ -1966,7 +1953,6 @@ re_showfile:
 			{
 				if(page_num == SD_list)
 				{
-		 			//res = f_getcwd(currentpath, sizeof currentpath / sizeof *currentpath);
 		 			if(strcmp(currentpath,"/") !=0 ){		
 						dmaCopy(currentpath, currentpath_temp, MAX_path_len);
 						TCHAR *p=strrchr(currentpath_temp, '/');
@@ -2303,7 +2289,7 @@ re_showfile:
 			(savfilename)[strlen8-1] = 'v';
 		}
 		#ifdef DEBUG
-			//DEBUG_printf("sav %s",savfilename);			
+			DEBUG_printf("sav %s",savfilename);			
 		#endif
 		if(is_EMU ==0){//gba
 			if(old_Save_num != Save_num){
@@ -2385,8 +2371,8 @@ re_showfile:
 			}
 		}
 		#ifdef DEBUG
-			//DEBUG_printf("saveMODE %x",saveMODE);
-			//DEBUG_printf("savefilesize %x",savefilesize);
+			DEBUG_printf("saveMODE %x",saveMODE);
+			DEBUG_printf("savefilesize %x",savefilesize);
 		#endif	
 		if(MENU_line<2)//PSRAM DirectPSRAM or soft reset	 or run NOR game 
 		{
@@ -2414,13 +2400,13 @@ re_showfile:
 			FAT_table_buffer[0x1F4/4] = 0x1;	//rom copy to psram
 			FAT_table_buffer[0x1F8/4] = (&EZcardFs)->csize;//0x40;	//secort of cluster
 			FAT_table_buffer[0x1FC/4] = (saveMODE<<24) | savefilesize;	//save mode and save file size
-			//DEBUG_printf(" %08X %08X ", FAT_table_buffer[0],FAT_table_buffer[1]);
-			//DEBUG_printf(" %08X %08X ", FAT_table_buffer[2],FAT_table_buffer[3]);
-			//DEBUG_printf(" %08X %08X ", FAT_table_buffer[4],FAT_table_buffer[5]);
-			//DEBUG_printf(" %08X %08X ", FAT_table_buffer[0x200/4],FAT_table_buffer[0x204/4]);		
-			//DEBUG_printf(" %08X %08X ", FAT_table_buffer[0x208/4],FAT_table_buffer[0x20C/4]);
-			//DEBUG_printf(" %08X %08X ", FAT_table_buffer[0x1F0/4],FAT_table_buffer[0x1F4/4]);
-			//DEBUG_printf(" %08X %08X ", FAT_table_buffer[0x1F8/4],FAT_table_buffer[0x1FC/4]);					
+			DEBUG_printf(" %08X %08X ", FAT_table_buffer[0],FAT_table_buffer[1]);
+			DEBUG_printf(" %08X %08X ", FAT_table_buffer[2],FAT_table_buffer[3]);
+			DEBUG_printf(" %08X %08X ", FAT_table_buffer[4],FAT_table_buffer[5]);
+			DEBUG_printf(" %08X %08X ", FAT_table_buffer[0x200/4],FAT_table_buffer[0x204/4]);		
+			DEBUG_printf(" %08X %08X ", FAT_table_buffer[0x208/4],FAT_table_buffer[0x20C/4]);
+			DEBUG_printf(" %08X %08X ", FAT_table_buffer[0x1F0/4],FAT_table_buffer[0x1F4/4]);
+			DEBUG_printf(" %08X %08X ", FAT_table_buffer[0x1F8/4],FAT_table_buffer[0x1FC/4]);					
 		}
 		
 		if(is_EMU)
@@ -2452,7 +2438,6 @@ re_showfile:
 					
 			FAT_table_buffer[0x1F4/4] = 0x2;	//copy mode
 			Send_FATbuffer(FAT_table_buffer,1); //only save FAT
-			//wait_btn();
 			SetRompageWithHardReset(pNorFS[show_offset+file_select].rompage,key_L);
 			while(1);
 		}
@@ -2462,7 +2447,6 @@ re_showfile:
 					ShowbootProgress(gl_loading_game);
 					Send_FATbuffer(FAT_table_buffer,0);
 					GBApatch_Cleanrom((u32*) PSRAMBase_S98,gamefilesize);
-					//wait_btn();
 					SetRompageWithHardReset(0x200,key_L);
 					break;
 				case 1://PSRAM BOOT WITH ADDON
@@ -2527,7 +2511,6 @@ re_showfile:
 						ShowbootProgress(gl_make_pat);
 						Make_pat_file(pfilename);
 					}
-					//wait_btn();	
 					SetRompageWithHardReset(0x200,key_L);
 					break;
 				case 2://WRITE TO NOR CLEAN			
@@ -2555,7 +2538,7 @@ re_showfile:
 					u32 needpatch = 0;
 					if((gl_reset_on==1) || (gl_rts_on==1) || (gl_sleep_on==1) || (gl_cheat_on==1))					
 					{
-						Patch_SpecialROM_sleepmode();//
+						Patch_SpecialROM_sleepmode();
 								
 						//get the location of the patch
 						res = f_open(&gfile,pfilename, FA_READ);	
@@ -2568,7 +2551,6 @@ re_showfile:
 						needpatch = 1;
 					}
 					res = Loadfile2NOR(pfilename, gl_norOffset,needpatch);
-					//wait_btn();	
 					if(res==0)
 					{
 						page_num = NOR_list;
@@ -2576,7 +2558,6 @@ re_showfile:
 					}	
 					else if(res==2)
 					{
-						//ClearWithBG((u16*)gImage_SD,0, 160-15, 60, 13, 1);
 						DrawHZText12("NOR FULL!",0,0,160-15, gl_color_NORFULL,1);
 						wait_btn();	
 						goto refind_file;

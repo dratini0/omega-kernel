@@ -78,7 +78,6 @@ u32 Setting_window(void)
 	u32 Set_OK_line=0;
 	
 	u8 edit_pos=0;
-	//u32 i; 
 	u32 currstate=0;
 	
 	char msg[128];
@@ -214,7 +213,6 @@ u32 Setting_window(void)
 			sprintf(msg,"%s",gl_ingameRTC);
 			DrawHZText12(msg,0,set_offset,y_offset+line_x*7,gl_color_selected,1);			
 				Draw_select_icon(x_offset,y_offset+line_x*7,(gl_ingame_RTC_open_status == 0x1));
-				//sprintf(msg,"%s",gl_offRTC_powersave);
 				ClearWithBG((u16*)gImage_SET,x_offset+15, y_offset+line_x*7, 6*6, 13, 1);
 				if(gl_ingame_RTC_open_status){
 					sprintf(msg,"%s",gl_ingameRTC_open);
@@ -452,7 +450,6 @@ u32 Setting_window(void)
 				
 				break	;
 			case 1: //edit state	
-				//if(Set_OK_line==0) {														
 					if(re_show)
 					{																
 						if(select ==0){
@@ -516,7 +513,7 @@ u32 Setting_window(void)
 							if(	sleep_pos < 3)	
 								Clear(clean_pos,y_offset+line_x*5 ,36,13,gl_color_btn_clean,1);
 							
-							//DEBUG_printf("%x %x %x", edit_sleephotkey[0],edit_sleephotkey[1],edit_sleephotkey[2]);
+							DEBUG_printf("%x %x %x", edit_sleephotkey[0],edit_sleephotkey[1],edit_sleephotkey[2]);
 							switch(edit_sleephotkey[0])
 							{
 								case 0:str0 = str_A;break;
@@ -577,7 +574,7 @@ u32 Setting_window(void)
 							}
 							if(	rtshotkey_pos < 3)	
 								Clear(clean_pos,y_offset+line_x*6 ,36,13,gl_color_btn_clean,1);
-							//DEBUG_printf("%x %x %x", edit_rtshotkey[0],edit_rtshotkey[1],edit_rtshotkey[2]);	
+							DEBUG_printf("%x %x %x", edit_rtshotkey[0],edit_rtshotkey[1],edit_rtshotkey[2]);	
 							switch(edit_rtshotkey[0])
 							{
 								case 0:str0 = str_A;break;
@@ -811,7 +808,6 @@ u32 Setting_window(void)
 											} 
 											else 
 											{
-												//if(edit_datetime[_DAY] > 1)
 													edit_datetime[_DAY]--;
 											}
 										break;
@@ -822,7 +818,6 @@ u32 Setting_window(void)
 											} 
 											else 
 											{
-												//if(edit_datetime[_DAY] > 1)
 													edit_datetime[_DAY]--;
 											}
 										break;

@@ -34,14 +34,11 @@ void Block_Erase(u32 blockAdd) //0x20000 BYTE pre block
 		Address-=0x800000;
 		page+=0x1000;
 	}
-	//u8 ramdata = *((vu8 *)(0xE000000+1)) ;
 	SetRompage(page);
-	//u16 norid = Read_S98NOR_ID();
 	Chip_Reset();
 	v1=0;v2=1;
 	if((blockAdd==0) || (blockAdd==0x3FE0000))
 	{
-		//Address=blockAdd;
 		for(loop=0;loop<0x20000;loop+=0x8000)
 		{
 			*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
@@ -294,7 +291,6 @@ u32 Loadfile2NOR(TCHAR *filename, u32 NORaddress,u32 have_patch)
 			}
 				
 			WriteFlash_with32word(blocknum+NORaddress,pReadCache,0x20000);
-			//WriteFlash(blocknum+NORaddress,pReadCache,0x20000);
 
 		}
 		f_close(&gfile);
@@ -315,7 +311,7 @@ u32 Loadfile2NOR(TCHAR *filename, u32 NORaddress,u32 have_patch)
 	else
 	{
 		#ifdef DEBUG
-			//DEBUG_printf("Bad NOR ID");
+			DEBUG_printf("Bad NOR ID");
 		#endif
 		return 1;
 	}
@@ -332,19 +328,18 @@ u32 GetFileListFromNor(void)
 	Value = *(vu16 *)(StartAddress + 0xbe);
 	u16 x24 = *(vu16 *)(StartAddress + 0x6);
 
-	//DEBUG_printf(" %x %x %x",StartAddress,Value,x24);
+	DEBUG_printf(" %x %x %x",StartAddress,Value,x24);
 
 	while( ((Value&0xFF)==0xCE) || ((Value&0xFF)==0xCF)|| ((Value&0xFF)==0x00)|| (x24==0x51ae))
 	{
-		//DEBUG_printf(" %x %x %x",StartAddress,Value,x24);
+		DEBUG_printf(" %x %x %x",StartAddress,Value,x24);
 		if(*(vu8 *)(StartAddress+0xb2) == 0x96)
 		{
 			memcpy(temp,(char*)(StartAddress+0xa0),0x10);
-			//temp[12] = 0 ;
 
-			//DEBUG_printf("  %s VS %s",temp ,pNorFS[count].gamename);
+			DEBUG_printf("  %s VS %s",temp ,pNorFS[count].gamename);
 			
-			if(memcmp(temp,pNorFS[count].gamename,0x10) ==0) //if(!strcasecmp(temp, pNorFS[count].gamename))
+			if(memcmp(temp,pNorFS[count].gamename,0x10) ==0)
 			{
 				gl_norOffset += pNorFS[count].filesize;
 				StartAddress += pNorFS[count].filesize;

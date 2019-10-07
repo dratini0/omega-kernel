@@ -62,7 +62,6 @@ const char* gl_online_manual;
 const char* gl_no_game_played;
 
 const char* gl_ingameRTC;
-//const char* gl_offRTC_powersave;
 const char* gl_ingameRTC_open;
 const char* gl_ingameRTC_close;
 
@@ -78,7 +77,7 @@ const char* const *gl_rom_menu;
 const char* const *gl_nor_op;
 
 
-//中文
+//Chinese
 static const char zh_init_error[]="TF卡初始化失败";
 static const char zh_power_off[]="关机";
 static const char zh_init_ok[]="TF卡初始化成功";
@@ -139,7 +138,6 @@ static const char zh_online_manual[]="  在线说明书";
 static const char zh_no_game_played[]="还没玩过游戏";
 
 static const char zh_ingameRTC[]=" 游戏时钟";
-//static const char zh_offRTC_powersave[]=" ";
 static const char zh_ingameRTC_open[]="打开";
 static const char zh_ingameRTC_close[]="关闭";//TURNOFF TO POWER SAVE
 
@@ -167,7 +165,7 @@ static const char * const zh_nor_op[]={
 
 
 
-//英文
+//English
 static const char en_init_error[]="Micro SD card initial error";
 static const char en_power_off[]="Power off";
 static const char en_init_ok[]="Micro SD card initial OK";
@@ -316,7 +314,6 @@ void LoadChinese(void)
 	gl_no_game_played = zh_no_game_played;
 	
 	gl_ingameRTC = zh_ingameRTC;
-	//gl_offRTC_powersave = zh_offRTC_powersave;
 	gl_ingameRTC_open = zh_ingameRTC_open;
 	gl_ingameRTC_close = zh_ingameRTC_close;
 	
@@ -395,7 +392,6 @@ void LoadEnglish(void)
 	gl_no_game_played = en_no_game_played;
 	
 	gl_ingameRTC = en_ingameRTC;
-	//gl_offRTC_powersave = en_offRTC_powersave;
 	gl_ingameRTC_open = en_ingameRTC_open;
 	gl_ingameRTC_close = en_ingameRTC_close;
 	

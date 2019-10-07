@@ -149,7 +149,7 @@ void Get_KEY_val(FIL* file,char*KEY_section,char*KEY_secval,char getbuff[])
 	    }
 	          
 	  }
-     //DEBUG_printf("KEY_section %s, section %s",KEY_section,section);	     
+     DEBUG_printf("KEY_section %s, section %s",KEY_section,section);	     
 		if( strcmp(KEY_section,section)== 0)
 		{
 			if( strcmp(KEY_secval,_paramk) == 0)
@@ -198,7 +198,7 @@ u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/)
     }
 
 		int buf_len = strlen(buf);
-		//DEBUG_printf("cht buf_len %x",buf_len);	    
+		DEBUG_printf("cht buf_len %x",buf_len);	    
           
     // ignore and skip the line with first chracter '#', '=' or '/'
     if (buf_len <= 1 || buf[0] == '#' || buf[0] == '=' || buf[0] == '/')
@@ -267,7 +267,7 @@ u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/)
 	  }
 	  _vlen--; //remove 0xd
 	    
-     //DEBUG_printf("KEY_section %s, section %s",KEY_section,section);	     
+     DEBUG_printf("KEY_section %s, section %s",KEY_section,section);	     
 		if( strcmp(KEY_section,section)== 0)
 		{
 			if( strcmp(KEY_secval,_paramk) == 0)
@@ -296,7 +296,7 @@ u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/)
 			    }
 
 					int buf_len = strlen(buf);
-					//DEBUG_printf("cht buf_len %x",buf_len);	    
+					DEBUG_printf("cht buf_len %x",buf_len);	    
 			          
 			    // ignore and skip the line with first chracter '#', '=' or '/'
 			    if (buf_len <= 1 || buf[0] == '#' || buf[0] == '=' || buf[0] == '/')
@@ -313,7 +313,7 @@ u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/)
 						_paramv[_vlen++] = buf[i];
 		      }
 		       _vlen--; //remove 0xd
-		      //DEBUG_printf("%x %x %x %x %x %x %x %x", buf[0],buf[1], buf[2],buf[3], buf[4],buf[5], buf[6],buf[7]);	
+		      DEBUG_printf("%x %x %x %x %x %x %x %x", buf[0],buf[1], buf[2],buf[3], buf[4],buf[5], buf[6],buf[7]);	
 		      //wait_btn();
 			    
 			  }			  			  
@@ -434,7 +434,7 @@ u32 Get_all_Section_val(FIL* file)
         }
         else if (buf[i] == '=')
         {
-      		//DEBUG_printf(":%s ",_paramk);
+      		DEBUG_printf(":%s ",_paramk);
       		memcpy(tmpCHTFS.LINEname,_paramk,_klen);      		
       		tmpCHTFS.is_section = 0; 
       		
@@ -501,9 +501,9 @@ void Show_KEY_val(u32 total,u32 Select,u32 showoffset)
 			sprintf(msg,"%s",((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname);		
 			
 			//int res = utf8_check(((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname,strlen(((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname));
-			//DEBUG_printf(" %x",res);
+			DEBUG_printf(" %x",res);
 		
-			//DEBUG_printf(" %x %x %x %x ",((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname[0],((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname[1],((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname[2],((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname[3]);
+			DEBUG_printf(" %x %x %x %x ",((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname[0],((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname[1],((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname[2],((FM_CHT_LINE*)pCHTbuffer)[showoffset+line].LINEname[3]);
 	
 			//if(res==1)
 			//{
@@ -569,7 +569,7 @@ void Analyze_KEYVAL(FIL* file,u32 total)
 	u32 address_add;
 	//char BUF_val[256];
 	
-	//DEBUG_printf("total %x  ",total);
+	DEBUG_printf("total %x  ",total);
 	gl_cheat_count=0;
 		
 	if(total)
@@ -585,7 +585,7 @@ void Analyze_KEYVAL(FIL* file,u32 total)
 			{
 				current_select--;
 			}
-			//DEBUG_printf("section %s  ", ((FM_CHT_LINE*)pCHTbuffer)[current_select].LINEname);										
+			DEBUG_printf("section %s  ", ((FM_CHT_LINE*)pCHTbuffer)[current_select].LINEname);										
 			buflen= Get_CHT_val(&gfile,((FM_CHT_LINE*)pCHTbuffer)[current_select].LINEname,((FM_CHT_LINE*)pCHTbuffer)[tol].LINEname);
 																																				
 			address_len=0;
@@ -604,7 +604,7 @@ void Analyze_KEYVAL(FIL* file,u32 total)
 						is_address = 0;											 
 					}
 					else{	//next ','
-						//DEBUG_printf(",0x%x =%x", str2hex(address_buf)+address_add,str2hex(val_buf));
+						DEBUG_printf(",0x%x =%x", str2hex(address_buf)+address_add,str2hex(val_buf));
 						ST_entry cheat = { str2hex(address_buf)+address_add,str2hex(val_buf) };
 						pCHEAT[gl_cheat_count++] = cheat;
 		
@@ -690,7 +690,7 @@ u32 Change2cht_folder(u32 chtname)
 	memset(chtnamebuf,0x00,100);
 	sprintf(chtnamebuf,"%d%d%d%d",HexToChar(((u8*)&chtname)[0]),HexToChar(((u8*)&chtname)[1]),HexToChar(((u8*)&chtname)[2]),HexToChar(  ((u8*)&chtname)[3] )  );
 	u32 num=atoi(chtnamebuf);
-	//DEBUG_printf("num =%d", num);					
+	DEBUG_printf("num =%d", num);					
 	if(num < 200){
 		folder_name = (TCHAR*)"0000";
 	}
