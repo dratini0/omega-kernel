@@ -202,7 +202,7 @@ void WriteFlash_with32word(u32 address,u8 *buffer,u32 size)
 u32 Loadfile2NOR(TCHAR *filename, u32 NORaddress,u32 have_patch)
 {
 	u32 res;
-	u32 ret;
+	UINT ret;
 	u32 filesize;
 	u32 fileneedsize;
 	
@@ -211,7 +211,6 @@ u32 Loadfile2NOR(TCHAR *filename, u32 NORaddress,u32 have_patch)
 	FM_NOR_FS tmpNorFS ;
 	char temp[50];
 
-	u16 readdata;
 	u32 add_patch = 0;
 			
 	u16 norid = Read_S98NOR_ID();
@@ -223,7 +222,7 @@ u32 Loadfile2NOR(TCHAR *filename, u32 NORaddress,u32 have_patch)
 		
 		filesize = f_size(&gfile);		
 		f_lseek(&gfile, 0xa0);		
-		f_read(&gfile, temp, 0x10, (u32 *)&ret);//read game name
+		f_read(&gfile, temp, 0x10, &ret);//read game name
 
 		memcpy(tmpNorFS.gamename,temp,0x10);
 		tmpNorFS.rompage = NORaddress >> 17;
@@ -282,7 +281,7 @@ u32 Loadfile2NOR(TCHAR *filename, u32 NORaddress,u32 have_patch)
 			Block_Erase(blocknum+NORaddress);
 
 			f_lseek(&gfile, blocknum);
-			f_read(&gfile, pReadCache, 0x20000, (u32 *)&ret);//pReadCache max 0x20000 Byte
+			f_read(&gfile, pReadCache, 0x20000, &ret);//pReadCache max 0x20000 Byte
 			if(have_patch){
 				if((gl_reset_on==1) || (gl_rts_on==1) || (gl_sleep_on==1) || (gl_cheat_on==1))		    
 				{
@@ -310,7 +309,7 @@ u32 Loadfile2NOR(TCHAR *filename, u32 NORaddress,u32 have_patch)
 			}
 		}
 		
-		Save_NOR_info(pNorFS,sizeof(FM_NOR_FS)*0x40);
+		Save_NOR_info((u8 *) pNorFS,sizeof(FM_NOR_FS)*0x40);
 		return 0;
 	}		
 	else
@@ -326,8 +325,7 @@ u32 GetFileListFromNor(void)
 {
 	REG_IME = 0 ;
 	u32 page=0 ,count=0;
-	u32 StartAddress = FlashBase_S98;
-	FM_NOR_FS tmpNorFS ;
+	vu8 *StartAddress = FlashBase_S98;
 	char temp[50];
 	vu16  Value;
 

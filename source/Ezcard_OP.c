@@ -13,7 +13,7 @@
 #include "Newest_FW_ver.h"
 #include "reset.h"
 extern u32 FAT_table_buffer[FAT_table_size/4]EWRAM_BSS;
-static u32 crc32(unsigned char *buf, u32 size);
+static u32 crc32(const unsigned char *buf, u32 size);
 static void IWRAM_CODE SetSDControl(u16  control);
 static void IWRAM_CODE SD_Read_state(void);
 static u16 IWRAM_CODE SD_Response(void);
@@ -91,7 +91,7 @@ u32 Read_SD_sectors(u32 address,u16 count,u8* SDbuffer)
 	
 	u16 i;
 	u16 blocks;
-	u32 res;
+	u32 res = 0;
 	u32 times=2;
 	for(i=0;i<count;i+=4)
 	{
@@ -121,7 +121,7 @@ u32 Read_SD_sectors(u32 address,u16 count,u8* SDbuffer)
 		dmaCopy((void*)0x9E00000, SDbuffer+i*512, blocks*512);
 	}
 	SD_Disable();
-	return 0;
+	return res;
 }
 // --------------------------------------------------------------------
 u32 Write_SD_sectors(u32 address,u16 count, const u8* SDbuffer)
@@ -130,7 +130,7 @@ u32 Write_SD_sectors(u32 address,u16 count, const u8* SDbuffer)
 	SD_Read_state();
 	u16 i;
 	u16 blocks;
-	u32 res;
+	u32 res = 0;
 	for(i=0;i<count;i+=4)
 	{
 		blocks = (count-i>4)?4:(count-i);
@@ -149,7 +149,7 @@ u32 Write_SD_sectors(u32 address,u16 count, const u8* SDbuffer)
 	}
 	delay(3000);
 	SD_Disable();
-	return 0;
+	return res;
 }
 // --------------------------------------------------------------------
 u16 Read_S71NOR_ID()
@@ -341,7 +341,7 @@ void Save_NOR_info(u8 * NOR_info_buffer,u32 buffersize)
 // --------------------------------------------------------------------
 void Save_SET_info(u16 * SET_info_buffer,u32 buffersize)
 {
-	Save_info(SET_info_offset, SET_info_buffer,buffersize);
+	Save_info(SET_info_offset, (u8 *) SET_info_buffer,buffersize);
 }
 // --------------------------------------------------------------------
 void Read_NOR_info()
@@ -591,7 +591,7 @@ static const u32 crc32tab[] = {
  0xb3667a2eL, 0xc4614ab8L, 0x5d681b02L, 0x2a6f2b94L,
  0xb40bbe37L, 0xc30c8ea1L, 0x5a05df1bL, 0x2d02ef8dL 
 };
-u32 crc32(unsigned char *buf, u32 size)
+u32 crc32(const unsigned char *buf, u32 size)
 {
 	u32 i, crc;
 	crc = 0xFFFFFFFF;

@@ -35,7 +35,7 @@ static u32 iCount2;
 
 #define sizeofa(array) (sizeof(array)/sizeof(array[0]))
 
-u32 spend_address;
+static u32 spend_address;
 
 static u32 Get_spend_address(u32* Data);
 static void Add2(u32 anOffset, u32 aValue);
@@ -781,7 +781,7 @@ u32 Check_pat(TCHAR* gamefilename)
 void Make_pat_file(TCHAR* gamefilename)
 {
 	u32 res;
-	u32 written;
+	UINT written;
 	u32 w_buffer[16];
 	
 	res = f_mkdir("/PATCH");
@@ -875,7 +875,7 @@ u8 Check_mde_file(TCHAR* gamefilename)
 void Make_mde_file(TCHAR* gamefilename,u8 Save_num)
 {
 	u32 res;
-	u32 written;
+	UINT written;
 	u8 w_buffer[16];
 
 	TCHAR currentpath[256];
@@ -907,8 +907,6 @@ void Make_mde_file(TCHAR* gamefilename,u8 Save_num)
 //------------------------------------------------------------------
 u32 Check_RTS(TCHAR* gamefilename)
 {
-	UINT  ret;
-	u32 find_the_patfile;
 	u32 rtsfilesize;
 	u32 res;
 	
@@ -939,7 +937,7 @@ u32 Check_RTS(TCHAR* gamefilename)
 		if(res==FR_OK)
 		{
 			int i;
-			unsigned int written;
+			UINT written;
 			memset(pReadCache,0xFF,0x200*4);
 			for(i=0;i<(0x70000)/0x800 ;i++)
 			{

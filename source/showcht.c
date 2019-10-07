@@ -24,17 +24,17 @@ static u16 gl_color_chtBG    = RGB(4,8,0xC);
 //------------------------------------------------------------------
 
 
-static u8 buf[MAX_BUF_LEN]EWRAM_BSS;
+static char buf[MAX_BUF_LEN]EWRAM_BSS;
 static char _paramv[MAX_BUF_LEN] EWRAM_BSS;
 
 static void Get_KEY_val(FIL* file,char*KEY_section,char*KEY_secval,char getbuff[]);
 static u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/);
 static u32 Get_all_Section_val(FIL* file);
 static void Show_KEY_val(u32 total,u32 Select,u32 showoffset);
-static unsigned long str2hex(unsigned char*str);
+static unsigned long str2hex(char *str);
 static void Analyze_KEYVAL(FIL* file,u32 total);
 static u32 Check_count(u32 all_count);
-static unsigned char HexToChar(unsigned char bChar)  ;
+static unsigned char HexToChar(char bChar);
 static u32 Change2cht_folder(u32 chtname);
 static void Show_num(u32 totalcount,u32 select);
 //------------------------------------------------------------------
@@ -55,7 +55,6 @@ void Get_KEY_val(FIL* file,char*KEY_section,char*KEY_secval,char getbuff[])
 	int text_comment = 0;
 
 	int in_section=0;
-	int keyval_count=0;
 
 	char section[MAX_KEY_LEN] = {0};
 
@@ -99,7 +98,6 @@ void Get_KEY_val(FIL* file,char*KEY_section,char*KEY_secval,char getbuff[])
 
     int is_section=0;
     int section_len=0;
-    int _val_len=0;
 
     for (i=0; i<buf_len; ++i)
     {
@@ -124,7 +122,6 @@ void Get_KEY_val(FIL* file,char*KEY_section,char*KEY_secval,char getbuff[])
       {
           is_section = 0;
           in_section = 1;
-          _val_len = 0;
           break;
       }
 
@@ -159,7 +156,7 @@ void Get_KEY_val(FIL* file,char*KEY_section,char*KEY_secval,char getbuff[])
 			{
 				strcpy(getbuff,_paramv); 
 
-				return 0;	
+				return;	
 			}				
 		}
 		if (strcmp(_paramk, "")==0 || strcmp(_paramv, "")==0)
@@ -174,7 +171,6 @@ u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/)
 	int text_comment = 0;
 
 	int in_section=0;
-	int keyval_count=0;
 
 	char section[MAX_KEY_LEN] = {0};
 
@@ -219,7 +215,6 @@ u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/)
 
     int is_section=0;
     int section_len=0;
-    int _val_len=0;
 
     for (i=0; i<buf_len; ++i)
     {
@@ -244,7 +239,6 @@ u32 Get_CHT_val(FIL* file,char*KEY_section,char*KEY_secval/*,char getbuff[]*/)
       {
           is_section = 0;
           in_section = 1;
-          _val_len = 0;
           break;
       }
 
@@ -342,7 +336,6 @@ u32 Get_all_Section_val(FIL* file)
 
 	int in_section=0;
 	//char keyval[10][25];
-	int keyval_count=0;
 	u32 Line = 0;
 
 
@@ -542,7 +535,7 @@ void Show_KEY_val(u32 total,u32 Select,u32 showoffset)
 	}		
 }
 //------------------------------------------------------------------
-unsigned long str2hex(unsigned char*str)
+unsigned long str2hex(char *str)
 {
 	unsigned long sum=0;
 	unsigned long i;
@@ -569,8 +562,8 @@ void Analyze_KEYVAL(FIL* file,u32 total)
 	//u32 address;
 	u32 address_len;
 	u32 val_len;
-	u8 address_buf[8];
-	u8 val_buf[3];
+	char address_buf[8];
+	char val_buf[3];
 	u32 is_val;
 	u32 is_address;
 	u32 address_add;
@@ -665,7 +658,7 @@ u32 Check_count(u32 all_count)
 	return count;
 }
 //------------------------------------------------------------------
-unsigned char HexToChar(unsigned char bChar)  
+unsigned char HexToChar(char bChar)  
 {  
     if((bChar>=0x30)&&(bChar<=0x39))  
     {  
@@ -845,7 +838,7 @@ void Show_num(u32 totalcount,u32 select)
 void Open_cht_file(TCHAR *gamefilename,u32 havecht)
 {
 	u32 res;
-	char msg[128];
+	char msg[129];
 	TCHAR chtnamebuf[100];	
 
 	char buffer[128]={0};
@@ -866,7 +859,7 @@ void Open_cht_file(TCHAR *gamefilename,u32 havecht)
 	{
 		Change2cht_folder(havecht);
 		u8* chtmode;
-		chtmode = &havecht;
+		chtmode = (u8 *) &havecht;
 		sprintf(chtnamebuf,"%d%d%d%d.cht",HexToChar(chtmode[0]),HexToChar(chtmode[1]),HexToChar(chtmode[2]),HexToChar(chtmode[3]));
 	}	
 	res = f_open(&gfile,chtnamebuf, FA_READ);	

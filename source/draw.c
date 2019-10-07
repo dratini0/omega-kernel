@@ -20,38 +20,38 @@ void Clear(u16 x, u16 y, u16 w, u16 h, u16 c, u8 isDrawDirect)
 {
 	u16 *p;
 	u16 yi,ww,hh;
-    
+	
 	if(isDrawDirect)
 		p = VideoBuffer;
 	else
 		p = Vcache;
 
-    hh = (y+h>160)?160:(y+h);
-    ww  = (x+w>240)?(240-x):w;
+	hh = (y+h>160)?160:(y+h);
+	ww  = (x+w>240)?(240-x):w;
 
 	//u16 tmp[240];
 	for(u32 i=0;i<240;i++)
 		((u16*)pReadCache)[i] = c;
 
 	for(yi=y; yi < hh; yi++)
-		dmaCopy(pReadCache,p+yi*240+x,ww*2);         
+		dmaCopy(pReadCache,p+yi*240+x,ww*2);
 }
 //******************************************************************************
 void ClearWithBG(u16* pbg,u16 x, u16 y, u16 w, u16 h, u8 isDrawDirect)
 {
 	u16 *p;
 	u16 yi,ww,hh;
-    
+
 	if(isDrawDirect)
 		p = VideoBuffer;
 	else
 		p = Vcache;
 
-    hh = (y+h>160)?160:(y+h);
-    ww  = (x+w>240)?(240-x):w;
+	hh = (y+h>160)?160:(y+h);
+	ww  = (x+w>240)?(240-x):w;
 
 	for(yi=y; yi < hh; yi++)
-		dmaCopy(pbg+yi*240+x,p+yi*240+x,ww*2);       
+		dmaCopy(pbg+yi*240+x,p+yi*240+x,ww*2);
 }
 //******************************************************************************
 void DrawPic(u16 *GFX, u16 x, u16 y, u16 w, u16 h, u8 isTrans, u16 tcolor, u8 isDrawDirect)
@@ -84,10 +84,10 @@ void DrawPic(u16 *GFX, u16 x, u16 y, u16 w, u16 h, u8 isTrans, u16 tcolor, u8 is
 	}
 }
 //---------------------------------------------------------------------------------
-void DrawHZText12(char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect)
+void DrawHZText12(const char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect)
 {
-  u32 i,l,hi=0;
-  u32 location;
+	u32 i,l,hi=0;
+	u32 location;
 	u8 cc,c1,c2;
 	u16 *v;
 	u16 *p1 = Vcache;
@@ -109,15 +109,15 @@ void DrawHZText12(char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect)
 
 	if((u16)(len*6)>(u16)(240-x))
 		len=(240-x)/6;
-    while(hi<l)
-    {
+	while(hi<l)
+	{
 		c1 = str[hi];
-    	hi++;
-    	if(c1<0x80)  //ASCII
-    	{
+		hi++;
+		if(c1<0x80)  //ASCII
+		{
 			yy = 240*y;
-    		location = c1*12;
-    		for(i=0;i<12;i++)
+			location = c1*12;
+			for(i=0;i<12;i++)
 			{
 				cc = ASC_DATA[location+i];
 				if(cc & 0x01)
@@ -137,18 +137,18 @@ void DrawHZText12(char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect)
 				if(cc & 0x80)
 					v[x+yy]=c;
 				yy+=240;
-			}		
-    		x+=6;
-    		continue;
-    	}
+			}
+			x+=6;
+			continue;
+		}
 		else	//Double-byte
-		{	
-    		c2 = str[hi];
-    		hi++;
-    		if(c1<0xb0)
-    			location = ((c1-0xa1)*94+(c2-0xa1))*24;
-    		else
-    			location = (9*94+(c1-0xb0)*94+(c2-0xa1))*24;
+		{
+			c2 = str[hi];
+			hi++;
+			if(c1<0xb0)
+				location = ((c1-0xa1)*94+(c2-0xa1))*24;
+			else
+				location = (9*94+(c1-0xb0)*94+(c2-0xa1))*24;
 
 			yy = 240*y;
 			for(i=0;i<12;i++)
@@ -197,12 +197,12 @@ void DrawHZText12(char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect)
 //---------------------------------------------------------------------------------
 void DEBUG_printf(const char *format, ...)
 {
-    char* str;
-    va_list va;
+	char* str;
+	va_list va;
 
-    va_start(va, format);
-    vasprintf(&str, format, va);
-    va_end(va);
+	va_start(va, format);
+	vasprintf(&str, format, va);
+	va_end(va);
 
 		if(current_y==1)
 			{
@@ -210,19 +210,21 @@ void DEBUG_printf(const char *format, ...)
 				Clear(0, 0, 240, 160, 0x0000, 1);
 			}
 
-    DrawHZText12(str,0,0,current_y, RGB(31,31,31),1);
-    
-    free(str);
+	DrawHZText12(str,0,0,current_y, RGB(31,31,31),1);
 
-    current_y += 12;
+	free(str);
+
+	current_y += 12;
+	if(current_y>150) 
     if(current_y>150) 
-    {
-    	wait_btn();
-    	current_y=1;
-    }
+	if(current_y>150) 
+	{
+		wait_btn();
+		current_y=1;
+	}
 }
 //---------------------------------------------------------------------------------
-void ShowbootProgress(char *str)
+void ShowbootProgress(const char *str)
 {
 	u8 str_len = strlen(str); 	
 	Clear(60,160-15,120,15,gl_color_cheat_black,1);	

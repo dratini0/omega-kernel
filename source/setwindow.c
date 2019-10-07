@@ -27,16 +27,16 @@ u16 SET_info_buffer [0x200]EWRAM_BSS;
 #define	K_R		   (8)
 #define	K_L		 	 (9)
 
-static const u8* str_A      = "   A  ";
-static const u8* str_B      = "   B  ";
-static const u8* str_SELECT = "SELECT";
-static const u8* str_START  = "START ";
-static const u8* str_RIGHT  = "RIGHT ";
-static const u8* str_LEFT   = " LEFT ";
-static const u8* str_UP     = "  UP  ";
-static const u8* str_DOWN   = " DOWN ";
-static const u8* str_R      = "   R  ";
-static const u8* str_L      = "   L  ";
+static const char* str_A      = "   A  ";
+static const char* str_B      = "   B  ";
+static const char* str_SELECT = "SELECT";
+static const char* str_START  = "START ";
+static const char* str_RIGHT  = "RIGHT ";
+static const char* str_LEFT   = " LEFT ";
+static const char* str_UP     = "  UP  ";
+static const char* str_DOWN   = " DOWN ";
+static const char* str_R      = "   R  ";
+static const char* str_L      = "   L  ";
 
 static u16 v_reset;
 static u16 v_rts;
@@ -99,9 +99,9 @@ u32 Setting_window(void)
 	
 	u8 RTC_pos = 1;
 
-	u8 *str0;
-	u8 *str1;
-	u8 *str2;
+	const char *str0;
+	const char *str1;
+	const char *str2;
 	
 	Show_ver();
 	select = 0;
@@ -276,7 +276,7 @@ u32 Setting_window(void)
 				rtc_enable();
 				rtc_get(datetime);
 				rtc_disenable();				
-				char* wkday;
+				const char* wkday;
 				switch(UNBCD(datetime[3]&0x7))
 				{
 					case 0:wkday = gl_Sun;break;
@@ -485,7 +485,7 @@ u32 Setting_window(void)
 							if(	edit_pos < 7)	
 								Clear(clean_pos,y_offset ,clean_w,13,gl_color_btn_clean,1);
 								
-							char* wkday;
+							const char* wkday;
 							switch(edit_datetime[_WKD])
 							{
 								case 0:wkday = gl_Sun;break;
@@ -528,7 +528,8 @@ u32 Setting_window(void)
 								case 6:str0 = str_UP;break;	
 								case 7:str0 = str_DOWN;break;
 								case 8:str0 = str_R;break;
-								case 9:str0 = str_L;break;									
+								case 9:str0 = str_L;break;
+								default:str0 = str_L;break;
 							}	
 							switch(edit_sleephotkey[1])
 							{
@@ -541,7 +542,8 @@ u32 Setting_window(void)
 								case 6:str1 = str_UP;break;	
 								case 7:str1 = str_DOWN;break;
 								case 8:str1 = str_R;break;
-								case 9:str1 = str_L;break;									
+								case 9:str1 = str_L;break;
+								default:str1 = str_L;break;
 							}	
 							switch(edit_sleephotkey[2])
 							{
@@ -554,7 +556,8 @@ u32 Setting_window(void)
 								case 6:str2 = str_UP;break;	
 								case 7:str2 = str_DOWN;break;
 								case 8:str2 = str_R;break;
-								case 9:str2 = str_L;break;									
+								case 9:str2 = str_L;break;
+								default:str2 = str_L;break;
 							}	
 							sprintf(msg,"%s %s  %s",str0,str1,str2);
 							DrawHZText12(msg,0,x_offset+10,y_offset+line_x*5,gl_color_text,1);
@@ -586,7 +589,8 @@ u32 Setting_window(void)
 								case 6:str0 = str_UP;break;	
 								case 7:str0 = str_DOWN;break;
 								case 8:str0 = str_R;break;
-								case 9:str0 = str_L;break;									
+								case 9:str0 = str_L;break;
+								default:str0 = str_L;break;
 							}	
 							switch(edit_rtshotkey[1])
 							{
@@ -599,7 +603,8 @@ u32 Setting_window(void)
 								case 6:str1 = str_UP;break;	
 								case 7:str1 = str_DOWN;break;
 								case 8:str1 = str_R;break;
-								case 9:str1 = str_L;break;									
+								case 9:str1 = str_L;break;
+								default:str1 = str_L;break;
 							}	
 							switch(edit_rtshotkey[2])
 							{
@@ -612,7 +617,8 @@ u32 Setting_window(void)
 								case 6:str2 = str_UP;break;	
 								case 7:str2 = str_DOWN;break;
 								case 8:str2 = str_R;break;
-								case 9:str2 = str_L;break;									
+								case 9:str2 = str_L;break;
+								default:str2 = str_L;break;
 							}	
 							sprintf(msg,"%s %s  %s",str0,str1,str2);
 							DrawHZText12(msg,0,x_offset+10,y_offset+line_x*6,gl_color_text,1);
