@@ -1,5 +1,5 @@
-//#ifndef	EZKERNEL_HEADER
-//#define EZKERNEL_HEADER
+#ifndef EZKERNEL_HEADER
+#define EZKERNEL_HEADER
 
 #include "ff.h"
 
@@ -115,4 +115,4 @@ void CheckLanguage();
 void wait_btn();
 u32 Check_game_save_FAT(TCHAR *filename,u32 game_save_rts);
 
-//#endif
+#endif

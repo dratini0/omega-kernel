@@ -1,3 +1,6 @@
+#ifndef SHOWCHT_HEADER
+#define SHOWCHT_HEADER
+
 #include <gba_base.h>
 
 
@@ -29,3 +32,5 @@ extern u32 gl_cheat_count;
 u32 Check_cht_file(TCHAR *gamefilename);
 void Open_cht_file(TCHAR *gamefilename,u32 havecht);
 void Trim(char s[]);
+
+#endif

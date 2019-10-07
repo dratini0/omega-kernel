@@ -1,3 +1,6 @@
+#ifndef EZCARD_OP_HEADER
+#define EZCARD_OP_HEADER
+
 #include <gba_base.h>
 
 #include "ff.h"
@@ -26,3 +29,5 @@ u16 IWRAM_CODE Read_FPGA_ver(void);
 void IWRAM_CODE Set_RTC_status(u16  status);
 void IWRAM_CODE Set_AUTO_save(u16  mode);
 void IWRAM_CODE Check_FW_update(u16 Current_FW_ver,u16 Built_in_ver);
+
+#endif
