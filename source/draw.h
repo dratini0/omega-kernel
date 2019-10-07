@@ -6,7 +6,7 @@
 #ifdef DEBUG
 void DEBUG_printf(const char *format, ...);
 #else
-#define DEBUG_printf(...)
+#define DEBUG_printf(...) {}
 #endif
 
 void IWRAM_CODE Clear(u16 x, u16 y, u16 w, u16 h, u16 c, u8 isDrawDirect);
