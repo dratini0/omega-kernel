@@ -14,7 +14,6 @@
 #include "ezkernel.h"
 
 
-static int current_y = 1;
 //******************************************************************************
 void Clear(u16 x, u16 y, u16 w, u16 h, u16 c, u8 isDrawDirect)
 {
@@ -198,6 +197,7 @@ void DrawHZText12(const char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect
 #ifdef DEBUG
 void DEBUG_printf(const char *format, ...)
 {
+	static int current_y = 1;
 	char* str;
 	va_list va;
 
