@@ -18,7 +18,7 @@
 //---------------------------------------------------------------
 void Chip_Reset()
 {
-	*((vu16 *)(FlashBase_S98)) = 0xF0 ;
+	FlashBase_S98[0] = 0xF0;
 }
 //---------------------------------------------------------------
 void Block_Erase(u32 blockAdd) //0x20000 BYTE pre block
@@ -41,16 +41,16 @@ void Block_Erase(u32 blockAdd) //0x20000 BYTE pre block
 	{
 		for(loop=0;loop<0x20000;loop+=0x8000)
 		{
-			*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-			*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-			*((vu16 *)(FlashBase_S98+0x555*2)) = 0x80 ;
-			*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-			*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-			*((vu16 *)(FlashBase_S98+Address+loop)) = 0x30 ;
+			FlashBase_S98[0x555] = 0xAA ;
+			FlashBase_S98[0x2AA] = 0x55 ;
+			FlashBase_S98[0x555] = 0x80 ;
+			FlashBase_S98[0x555] = 0xAA ;
+			FlashBase_S98[0x2AA] = 0x55 ;
+			FlashBase_S98[(Address + loop)/2] = 0x30 ;
 			do
 			{
-				v1 = *((vu16 *)(FlashBase_S98+Address+loop)) ;
-				v2 = *((vu16 *)(FlashBase_S98+Address+loop)) ;
+				v1 = FlashBase_S98[(Address + loop)/2];
+				v2 = FlashBase_S98[(Address + loop)/2];
 			}while(v1!=v2);
 		}
 	}
@@ -58,16 +58,16 @@ void Block_Erase(u32 blockAdd) //0x20000 BYTE pre block
 	{
 		loop=Address;
 
-		*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-		*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-		*((vu16 *)(FlashBase_S98+0x555*2)) = 0x80 ;
-		*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-		*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-		*((vu16 *)(FlashBase_S98+loop)) = 0x30 ;
+		FlashBase_S98[0x555] = 0xAA ;
+		FlashBase_S98[0x2AA] = 0x55 ;
+		FlashBase_S98[0x555] = 0x80 ;
+		FlashBase_S98[0x555] = 0xAA ;
+		FlashBase_S98[0x2AA] = 0x55 ;
+		FlashBase_S98[loop/2] = 0x30 ;
 		do
 		{
-			v1 = *((vu16 *)(FlashBase_S98+loop)) ;
-			v2 = *((vu16 *)(FlashBase_S98+loop)) ;
+			v1 = FlashBase_S98[loop/2] ;
+			v2 = FlashBase_S98[loop/2] ;
 		}while(v1!=v2);
 	}
 	SetRompage(gl_currentpage);
@@ -79,12 +79,12 @@ void Chip_Erase()
 	u32 count=0;
 	vu16 v1,v2=0 ;
 	REG_IME = 0 ;
-	*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-	*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-	*((vu16 *)(FlashBase_S98+0x555*2)) = 0x80 ;
-	*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-	*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-	*((vu16 *)(FlashBase_S98+0x555*2)) = 0x10 ;
+	FlashBase_S98[0x555] = 0xAA ;
+	FlashBase_S98[0x2AA] = 0x55 ;
+	FlashBase_S98[0x555] = 0x80 ;
+	FlashBase_S98[0x555] = 0xAA ;
+	FlashBase_S98[0x2AA] = 0x55 ;
+	FlashBase_S98[0x555] = 0x10 ;
 	do
 	{
 		VBlankIntrWait();		
@@ -97,8 +97,8 @@ void Chip_Erase()
 		count++;
 
 		VBlankIntrWait();
-		v1 = *((vu16 *)(FlashBase_S98)) ;
-		v2 = *((vu16 *)(FlashBase_S98)) ;		
+		v1 = FlashBase_S98[0];
+		v2 = FlashBase_S98[0];
 	}while(v1!=v2);
 	REG_IME = 1 ;
 }
@@ -145,14 +145,14 @@ void WriteFlash(u32 address,u8 *buffer,u32 size)
 	v1=0;v2=1;
 	for(loopwrite=0;loopwrite<(size/2);loopwrite++)
 	{
-		*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-		*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-		*((vu16 *)(FlashBase_S98+0x555*2)) = 0xA0 ;
-		*((vu16 *)(FlashBase_S98+address+loopwrite*2)) = buf[loopwrite];
+		FlashBase_S98[0x555] = 0xAA ;
+		FlashBase_S98[0x2AA] = 0x55 ;
+		FlashBase_S98[0x555] = 0xA0 ;
+		FlashBase_S98[address/2 + loopwrite] = buf[loopwrite];
 		do
 		{
-			v1 = *((vu16 *)(FlashBase_S98+address+loopwrite*2)) ;
-			v2 = *((vu16 *)(FlashBase_S98+address+loopwrite*2)) ;
+			v1 = FlashBase_S98[address/2 + loopwrite] ;
+			v2 = FlashBase_S98[address/2 + loopwrite] ;
 		}while(v1!=v2);
 	}
 	SetRompage(gl_currentpage);
@@ -177,20 +177,20 @@ void WriteFlash_with32word(u32 address,u8 *buffer,u32 size)
 	v1=0;v2=1;
 	for(loopwrite=0;loopwrite<(size/32);loopwrite++)
 	{
-		*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-		*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-		*((vu16 *)(FlashBase_S98+address+loopwrite*32)) = 0x25;
-		*((vu16 *)(FlashBase_S98+address+loopwrite*32)) = 15;
+		FlashBase_S98[0x555] = 0xAA ;
+		FlashBase_S98[0x2AA] = 0x55 ;
+		FlashBase_S98[address/2 + loopwrite*16] = 0x25;
+		FlashBase_S98[address/2 + loopwrite*16] = 15;
 		for(i=0;i<=15;i++)
 		{
-			*((vu16 *)(FlashBase_S98+address+loopwrite*32 +2*i )) = buf[loopwrite*16+i];
+			FlashBase_S98[address/2 + loopwrite*16 + i] = buf[loopwrite*16 + i];
 		}	
-		*((vu16 *)(FlashBase_S98+address+loopwrite*32)) = 0x29;
+		FlashBase_S98[address/2 + loopwrite*16] = 0x29;
 		
 		do
 		{
-			v1 = *((vu16 *)(FlashBase_S98+address+loopwrite*32+0xF*2)) ;
-			v2 = *((vu16 *)(FlashBase_S98+address+loopwrite*32+0xF*2)) ;
+			v1 = FlashBase_S98[address/2 + loopwrite*16 + 0xF];
+			v2 = FlashBase_S98[address/2 + loopwrite*16 + 0xF];
 		}while(v1!=v2);
 	}
 	SetRompage(gl_currentpage);
@@ -240,24 +240,24 @@ u32 Loadfile2NOR(TCHAR *filename, u32 NORaddress,u32 have_patch)
 
 		
 		////////////////// erase all BBP
-		*((vu16 *)(FlashBase_S98)) = 0xF0 ;	
+		FlashBase_S98[0] = 0xF0 ;	
 		
-		*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA ;
-		*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55 ;
-		*((vu16 *)(FlashBase_S98+0x555*2)) = 0xC0 ;		
-		*((vu16 *)(FlashBase_S98+0x000*2)) = 0x80 ;
-		*((vu16 *)(FlashBase_S98+0x000*2)) = 0x30 ;
+		FlashBase_S98[0x555] = 0xAA ;
+		FlashBase_S98[0x2AA] = 0x55 ;
+		FlashBase_S98[0x555] = 0xC0 ;		
+		FlashBase_S98[0x000] = 0x80 ;
+		FlashBase_S98[0x000] = 0x30 ;
 		{
 			int polling_counter = 0x15000;
 			u32 v1;
 			do {
-				v1 = *((vu16 *)(FlashBase_S98+ 0x5C0000));
+				v1 = FlashBase_S98[0x2E0000];
 				polling_counter--;
 
 			} while (polling_counter);
 		}	
-		*((vu16 *)(FlashBase_S98+0x000*2)) = 0x90 ;
-		*((vu16 *)(FlashBase_S98+0x000*2)) = 0x00 ;			
+		FlashBase_S98[0] = 0x90 ;
+		FlashBase_S98[0] = 0x00 ;			
 		/////////////////		
 		
 			
@@ -321,7 +321,7 @@ u32 GetFileListFromNor(void)
 {
 	REG_IME = 0 ;
 	u32 page=0 ,count=0;
-	vu8 *StartAddress = FlashBase_S98;
+	vu8 *StartAddress = (vu8 *) FlashBase_S98;
 	char temp[50];
 	vu16  Value;
 
@@ -355,7 +355,7 @@ u32 GetFileListFromNor(void)
 			break;
 		}		
 
-		while(StartAddress >= FlashBase_S98_end)
+		while(StartAddress >= (vu8 *) FlashBase_S98_end)
 		{
 			page += 0x1000 ;
 			if(page>0x7000)

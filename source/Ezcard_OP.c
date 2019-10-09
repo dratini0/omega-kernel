@@ -26,7 +26,7 @@ static void IWRAM_CODE SPI_Write_Enable(void);
 static void IWRAM_CODE SPI_Write_Disable(void);
 
 // --------------------------------------------------------------------
-#define FlashBase_S71		0x08000000
+#define FlashBase_S71		((vu16 *) 0x08000000)
 
 #define NOR_info_offset 0x7A0000
 #define SET_info_offset 0x7B0000
@@ -154,23 +154,23 @@ u32 Write_SD_sectors(u32 address,u16 count, const u8* SDbuffer)
 u16 Read_S71NOR_ID()
 {
 	u16 ID1;
-	*((vu16 *)(FlashBase_S71)) = 0xF0;	
-	*((vu16 *)(FlashBase_S71+0x555*2)) = 0xAA;
-	*((vu16 *)(FlashBase_S71+0x2AA*2)) = 0x55;
-	*((vu16 *)(FlashBase_S71+0x555*2)) = 0x90;
-	ID1 = *((vu16 *)(FlashBase_S71+0xE*2));
-	*((vu16 *)(FlashBase_S71)) = 0xF0;
+	FlashBase_S71[0] = 0xF0;	
+	FlashBase_S71[0x555] = 0xAA;
+	FlashBase_S71[0x2AA] = 0x55;
+	FlashBase_S71[0x555] = 0x90;
+	ID1 = FlashBase_S71[0xE];
+	FlashBase_S71[0] = 0xF0;
 	return ID1;
 }	
 // --------------------------------------------------------------------
 u16 Read_S98NOR_ID()
 {
 	u16 ID1;
-	*((vu16 *)(FlashBase_S98)) = 0xF0 ;	
-	*((vu16 *)(FlashBase_S98+0x555*2)) = 0xAA;
-	*((vu16 *)(FlashBase_S98+0x2AA*2)) = 0x55;
-	*((vu16 *)(FlashBase_S98+0x555*2)) = 0x90;
-	ID1 = *((vu16 *)(FlashBase_S98+0xE*2));
+	FlashBase_S98[0] = 0xF0;
+	FlashBase_S98[0x555] = 0xAA;
+	FlashBase_S98[0x2AA] = 0x55;
+	FlashBase_S98[0x555] = 0x90;
+	ID1 = FlashBase_S98[0xE];
 	return ID1;
 }	
 // --------------------------------------------------------------------
@@ -294,43 +294,43 @@ void Save_info(u32 info_offset, u8 * info_buffer,u32 buffersize)
 	register u32 loopwrite ;
 	vu16 v1,v2;
 	
-	*((vu16 *)(FlashBase_S71)) = 0xF0 ;	
+	FlashBase_S71[0] = 0xF0 ;	
 	
 	offset= info_offset;
 	
-	*((vu16 *)(FlashBase_S71+0x555*2)) = 0xAA ;
-	*((vu16 *)(FlashBase_S71+0x2AA*2)) = 0x55 ;
-	*((vu16 *)(FlashBase_S71+0x555*2)) = 0x80 ;
-	*((vu16 *)(FlashBase_S71+0x555*2)) = 0xAA ;
-	*((vu16 *)(FlashBase_S71+0x2AA*2)) = 0x55 ;	
-	*((vu16 *)(FlashBase_S71+offset)) = 0x30 ;//erase
+	FlashBase_S71[0x555] = 0xAA ;
+	FlashBase_S71[0x2AA] = 0x55 ;
+	FlashBase_S71[0x555] = 0x80 ;
+	FlashBase_S71[0x555] = 0xAA ;
+	FlashBase_S71[0x2AA] = 0x55 ;	
+	FlashBase_S71[offset/2] = 0x30 ;//erase
 	do
 	{
-		v1 = *((vu16 *)(FlashBase_S71+offset)) ;
-		v2 = *((vu16 *)(FlashBase_S71+offset)) ;
-	}while(v1!=v2);		
+		v1 = FlashBase_S71[offset/2];
+		v2 = FlashBase_S71[offset/2];
+	}while(v1!=v2);
 	//erase finish
 	u32 i;
 	for(loopwrite=0;loopwrite<(buffersize/32);loopwrite++)
 	{
-		*((vu16 *)(FlashBase_S71+0x555*2)) = 0xAA;
-		*((vu16 *)(FlashBase_S71+0x2AA*2)) = 0x55;
-		*((vu16 *)(FlashBase_S71+offset+loopwrite*32)) = 0x25;
-		*((vu16 *)(FlashBase_S71+offset+loopwrite*32)) = 15;
+		FlashBase_S71[0x555] = 0xAA;
+		FlashBase_S71[0x2AA] = 0x55;
+		FlashBase_S71[offset/2 + loopwrite*16] = 0x25;
+		FlashBase_S71[offset/2 + loopwrite*16] = 15;
 		for(i=0;i<=15;i++)
 		{
-			*((vu16 *)(FlashBase_S71+offset+loopwrite*32 +2*i )) = buf[loopwrite*16+i];
+			FlashBase_S71[offset/2 + loopwrite*16 + i] = buf[loopwrite*16+i];
 		}	
-		*((vu16 *)(FlashBase_S71+offset+loopwrite*32)) = 0x29;
+		FlashBase_S71[offset/2 + loopwrite*16] = 0x29;
 		
 		do
 		{
-			v1 = *((vu16 *)(FlashBase_S71+offset+loopwrite*32));
-			v2 = *((vu16 *)(FlashBase_S71+offset+loopwrite*32));
+			v1 = FlashBase_S71[offset/2 + loopwrite*16];
+			v2 = FlashBase_S71[offset/2 + loopwrite*16];
 		}while(v1!=v2);
 	}
 
-	*((vu16 *)(FlashBase_S71)) = 0xF0;	
+	FlashBase_S71[0] = 0xF0;	
 }
 // --------------------------------------------------------------------
 void Save_NOR_info(u8 * NOR_info_buffer,u32 buffersize)
@@ -348,13 +348,13 @@ void Read_NOR_info()
 	register u32 loopwrite ;
 	for(loopwrite=0;loopwrite<sizeof(FM_NOR_FS)*0x40;loopwrite++)
 	{
-		((u16*)pNorFS)[loopwrite] = *((vu16 *)(FlashBase_S71+NOR_info_offset+loopwrite*2));
+		((u16*)pNorFS)[loopwrite] = FlashBase_S71[NOR_info_offset/2 + loopwrite];
 	}
 }
 // --------------------------------------------------------------------
 u16 Read_SET_info(u32 offset)
 {
-	return *((vu16 *)(FlashBase_S71+SET_info_offset+offset*2));
+	return FlashBase_S71[SET_info_offset/2 + offset];
 }
 // --------------------------------------------------------------------
 void SetSPIControl(u16  control)

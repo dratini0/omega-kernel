@@ -14,13 +14,13 @@
 #define FAT_table_SAV_offset 0x200
 #define FAT_table_RTS_offset 0x300
 
-#define VideoBuffer    (u16*)0x6000000
-#define Vcache         (u16*)pReadCache
+#define VideoBuffer    ((u16*)0x6000000)
+#define Vcache         ((u16*)pReadCache)
 #define RGB(r,g,b) ((r)+(g<<5)+(b<<10))
 
-#define PSRAMBase_S98			(u8*)0x08800000
-#define FlashBase_S98 		(vu8*)0x09000000
-#define FlashBase_S98_end (vu8*)0x09800000
+#define PSRAMBase_S98			((u8*)0x08800000)
+#define FlashBase_S98 		((vu16*)0x09000000)
+#define FlashBase_S98_end ((vu16*)0x09800000)
 
 #define SAVE_sram_base (u32)0x0E000000
 #define SRAMSaver		   (u32)0x0E000000
