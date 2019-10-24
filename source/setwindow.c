@@ -12,7 +12,7 @@
 #include "draw.h"
 #include "Ezcard_OP.h"
 
-extern const unsigned char __attribute__((aligned(4)))gImage_SET[76800];
+extern const unsigned char __attribute__((aligned(4)))SETBitmap[76800];
 
 u16 SET_info_buffer [0x200]EWRAM_BSS;
 
@@ -192,8 +192,8 @@ u32 Setting_window(void)
 				DrawHZText12(msg,0,x_offset+15,y_offset+line_x*4,(engine_pos==0)?gl_color_selected:gl_color_text,1);	
 			//	
 			
-			ClearWithBG((u16*)gImage_SET,set_offset, y_offset+line_x*5, 9*6, 13, 1);
-			ClearWithBG((u16*)gImage_SET,set_offset, y_offset+line_x*6, 9*6, 13, 1);
+			ClearWithBG((u16*)SETBitmap,set_offset, y_offset+line_x*5, 9*6, 13, 1);
+			ClearWithBG((u16*)SETBitmap,set_offset, y_offset+line_x*6, 9*6, 13, 1);
 			if( (v_rts==1) && (v_cheat == 0)  && (v_reset == 0)  && (v_sleep == 0)  ) {
 				sprintf(msg,"%s"," SAVE KEY");					
 				DrawHZText12(msg,0,set_offset,y_offset+line_x*5,gl_color_selected,1);	
@@ -213,7 +213,7 @@ u32 Setting_window(void)
 			sprintf(msg,"%s",gl_ingameRTC);
 			DrawHZText12(msg,0,set_offset,y_offset+line_x*7,gl_color_selected,1);			
 				Draw_select_icon(x_offset,y_offset+line_x*7,(gl_ingame_RTC_open_status == 0x1));
-				ClearWithBG((u16*)gImage_SET,x_offset+15, y_offset+line_x*7, 6*6, 13, 1);
+				ClearWithBG((u16*)SETBitmap,x_offset+15, y_offset+line_x*7, 6*6, 13, 1);
 				if(gl_ingame_RTC_open_status){
 					sprintf(msg,"%s",gl_ingameRTC_open);
 				}
@@ -294,7 +294,7 @@ u32 Setting_window(void)
 				if(MM >59)MM=0;
 				if(SS >59)SS=0;
 				sprintf(msg,"%u/%02u/%02u %02d:%02d:%02d %s",UNBCD(datetime[0])+2000,UNBCD(datetime[1]&0x1F),UNBCD(datetime[2]&0x3F),HH,MM,SS, wkday);
-				ClearWithBG((u16*)gImage_SET,x_offset, y_offset, 22*6, 13, 1);	
+				ClearWithBG((u16*)SETBitmap,x_offset, y_offset, 22*6, 13, 1);	
 				DrawHZText12(msg,0,x_offset,y_offset,gl_color_text,1);	
 				VBlankIntrWait();
 
@@ -453,7 +453,7 @@ u32 Setting_window(void)
 					if(re_show)
 					{																
 						if(select ==0){
-							ClearWithBG((u16*)gImage_SET,x_offset, y_offset, 23*6, 13, 1);	
+							ClearWithBG((u16*)SETBitmap,x_offset, y_offset, 23*6, 13, 1);	
 							switch(edit_pos)
 							{
 								case 0:clean_pos = x_offset;
@@ -499,7 +499,7 @@ u32 Setting_window(void)
 						}
 						else if(select ==4)
 						{
-							ClearWithBG((u16*)gImage_SET,x_offset, y_offset+line_x*5, 23*6, 13, 1);	
+							ClearWithBG((u16*)SETBitmap,x_offset, y_offset+line_x*5, 23*6, 13, 1);	
 							switch(sleep_pos)
 							{
 								case 0:clean_pos = x_offset+10;
@@ -561,7 +561,7 @@ u32 Setting_window(void)
 						}
 						else if(select ==5)
 						{
-							ClearWithBG((u16*)gImage_SET,x_offset, y_offset+line_x*6, 23*6, 13, 1);	
+							ClearWithBG((u16*)SETBitmap,x_offset, y_offset+line_x*6, 23*6, 13, 1);	
 							switch(rtshotkey_pos)
 							{
 								case 0:clean_pos = x_offset+10;
@@ -1131,7 +1131,7 @@ u32 Setting_window(void)
 						{
 							save_set_info();
 							CheckLanguage(); //read again    	
-							ClearWithBG((u16*)gImage_SET,0, 20, 240, 160-20, 1);
+							ClearWithBG((u16*)SETBitmap,0, 20, 240, 160-20, 1);
 							Set_OK = 0;													
 						}
 						else if(select == 3) 

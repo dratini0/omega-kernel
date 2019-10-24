@@ -22,22 +22,22 @@
 #include "showcht.h"
 #include "setwindow.h"
 
-#include "images/splash.h"
-#include "images/SD.h"
-#include "images/NOR.h" 
-#include "images/SET.h"
-#include "images/HELP.h"
-#include "images/RECENTLY.h"
+#include "splash.h"
+#include "SD.h"
+#include "NOR.h" 
+#include "SET.h"
+#include "HELP.h"
+#include "RECENTLY.h"
 
-#include "images/MENU.h"
-#include "images/icons.h"
-#include "images/nor_icon.h"
-#include "images/icon_FC.h"
-#include "images/icon_GB.h"
-#include "images/NOTFOUND.h"
+#include "MENU.h"
+#include "icons.h"
+#include "nor_icon.h"
+#include "icon_FC.h"
+#include "icon_GB.h"
+#include "NOTFOUND.h"
 
-#include "images/Chinese_manual.h"
-#include "images/English_manual.h"
+#include "Chinese_manual.h"
+#include "English_manual.h"
 
 #include "goomba.h"
 #include "pocketnes.h"
@@ -151,10 +151,10 @@ void Show_help_window()
 {
 	if(gl_select_lang == 0xE1E1)//english
 	{
-		DrawPic((u16*)gImage_English_manual, 240-70, 160-70, 70, 70, 0, 0, 1);//
+		DrawPic((u16*)English_manualBitmap, 240-70, 160-70, 70, 70, 0, 0, 1);//
 	}
 	else{
-		DrawPic((u16*)gImage_Chinese_manual, 240-70, 160-70, 70, 70, 0, 0, 1);//
+		DrawPic((u16*)Chinese_manualBitmap, 240-70, 160-70, 70, 70, 0, 0, 1);//
 	}
 	DrawHZText12("START	:",0,3,20, gl_color_selected,1);
 		DrawHZText12(gl_START_help,0,52,20, gl_color_text,1);
@@ -243,7 +243,7 @@ void Show_ICON_filename(u32 show_offset,u32 file_select,u32 haveThumbnail)
 			Clear(17,20 + file_select*14,(char_num == 17)?(17*6+1):(240-17),13,gl_color_selectBG_sd,1);
 		}
 
-		DrawPic((u16*)(gImage_icons+0*16*14*2),
+		DrawPic((u16*)iconsBitmap + 0*16*14,
 			0,
 			y_offset + line*14,
 			16,
@@ -297,23 +297,23 @@ void Show_ICON_filename(u32 show_offset,u32 file_select,u32 haveThumbnail)
 		u16* icon; 
 		if(!strcasecmp(&(pfilename[strlen8-3]), "gba"))
 		{
-			icon = (u16*)(gImage_icons+1*16*14*2);
+			icon = (u16*)iconsBitmap + 1*16*14;
 		}	
 		else if(!strcasecmp(&(pfilename[strlen8-3]), "gbc"))
 		{
-			icon = (u16*)(gImage_icon_GB);
+			icon = (u16*)(icon_GBBitmap);
 		}
 		else if(!strcasecmp(&(pfilename[strlen8-2]), "gb"))
 		{
-			icon = (u16*)(gImage_icon_GB);
+			icon = (u16*)(icon_GBBitmap);
 		}
 		else if(!strcasecmp(&(pfilename[strlen8-3]), "nes"))
 		{
-			icon = (u16*)(gImage_icon_FC);
+			icon = (u16*)(icon_FCBitmap);
 		}
 		else 
 		{
-			icon = (u16*)(gImage_icons+2*16*14*2);
+			icon = (u16*)iconsBitmap + 2*16*14;
 		}	
 		DrawPic(icon,
 			0,
@@ -450,7 +450,7 @@ void Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbna
 		xx2 = file_select;
 		showy1 = y_offset +(file_select-1)*14;
 		showy2 = y_offset +(file_select)*14;
-		ClearWithBG((u16*)gImage_SD,17, 20 + xx1*14, clean_len1, 13, 1);
+		ClearWithBG((u16*)SDBitmap,17, 20 + xx1*14, clean_len1, 13, 1);
 		Clear(17,20 + xx2*14,clean_len2,13,gl_color_selectBG_sd,1);
 	}
 	else //up
@@ -460,7 +460,7 @@ void Refresh_filename(u32 show_offset,u32 file_select,u32 updown,u32 haveThumbna
 		showy1 = y_offset +(file_select)*14;
 		showy2 = y_offset +(file_select+1)*14;	
 		Clear(17,20 + xx1*14,clean_len1,13,gl_color_selectBG_sd,1);	
-		ClearWithBG((u16*)gImage_SD,17, 20 + xx2*14,clean_len2, 13, 1);	
+		ClearWithBG((u16*)SDBitmap,17, 20 + xx2*14,clean_len2, 13, 1);	
 	}
 
 	if((file_select == (need_show_folder-1)) && (updown ==3))
@@ -540,7 +540,7 @@ void Show_ICON_filename_NOR(u32 show_offset,u32 file_select)
 			Clear(17,20 + file_select*14,240-17,13,gl_color_selectBG_nor,1);
 		}		
 
-		DrawPic((u16*)gImage_nor_icon/*(gImage_icons+2*16*14*2)*/,
+		DrawPic((u16*)nor_iconBitmap/*(iconsBitmap+2*16*14*2)*/,
 			0,
 			y_offset + line*14,
 			16,
@@ -579,7 +579,7 @@ void Refresh_filename_NOR(u32 show_offset,u32 file_select,u32 updown)
 		xx2 = file_select;
 		showy1 = y_offset +(file_select-1)*14;
 		showy2 = y_offset +(file_select)*14;
-		ClearWithBG((u16*)gImage_NOR,17, 20 + xx1*14, clean_len, 13, 1);
+		ClearWithBG((u16*)NORBitmap,17, 20 + xx1*14, clean_len, 13, 1);
 		Clear(17,20 + xx2*14,clean_len,13,gl_color_selectBG_nor,1);
 	}
 	else //up
@@ -589,7 +589,7 @@ void Refresh_filename_NOR(u32 show_offset,u32 file_select,u32 updown)
 		showy1 = y_offset +(file_select)*14;
 		showy2 = y_offset +(file_select+1)*14;
 		Clear(17,20 + xx1*14,clean_len,13,gl_color_selectBG_nor,1);
-		ClearWithBG((u16*)gImage_NOR,17, 20 + xx2*14,clean_len, 13, 1);
+		ClearWithBG((u16*)NORBitmap,17, 20 + xx2*14,clean_len, 13, 1);
 	}
 
 	DrawHZText12(pNorFS[show_offset+xx1].filename, char_num, 1+16, showy1, name_color1,1);
@@ -846,7 +846,7 @@ u32 show_recently_play(void)
 	u32 re_show = 1;
 	u32 return_val=0xBB;
 	
-	DrawPic((u16*)gImage_RECENTLY, 0, 0, 240, 160, 0, 0, 1);
+	DrawPic((u16*)RECENTLYBitmap, 0, 0, 240, 160, 0, 0, 1);
 	DrawHZText12(gl_recently_play,0,(240-strlen(gl_recently_play)*6)/2,4, gl_color_text,1);//TITLE
 	
 	all_count = get_count();	
@@ -1301,11 +1301,11 @@ void ShowTime(u32 page_num ,u32 page_mode)
 	delay(5);
 	
 	if(page_mode==0x1)
-		ClearWithBG((u16*)gImage_RECENTLY,80, 3, 80, 13, 1);	
+		ClearWithBG((u16*)RECENTLYBitmap,80, 3, 80, 13, 1);	
 	else if(page_num==SD_list)
-		ClearWithBG((u16*)gImage_SD,100, 3, 50, 13, 1);
+		ClearWithBG((u16*)SDBitmap,100, 3, 50, 13, 1);
 	else if (page_num==NOR_list)
-		ClearWithBG((u16*)gImage_NOR,100, 3, 50, 13, 1);
+		ClearWithBG((u16*)NORBitmap,100, 3, 50, 13, 1);
 	 
 	u8 HH = UNBCD(datetime[0]&0x3F);
 	u8 MM = UNBCD(datetime[1]&0x7F);
@@ -1497,7 +1497,7 @@ u32 Load_Thumbnail(TCHAR *pfilename_pic)
 //Delete file
 void SD_list_L_START(u32 show_offset, u32 file_select,u32 folder_total)
 {
-	DrawPic((u16*)gImage_MENU, 56, 25, 128, 110, 0, 0, 1);//show menu pic		
+	DrawPic((u16*)MENUBitmap, 56, 25, 128, 110, 0, 0, 1);//show menu pic		
 	Show_MENU_btn();
 
 	DrawHZText12(gl_LSTART_help,0,60,60,gl_color_text,1);//use sure?gl_LSTART_help
@@ -1548,7 +1548,7 @@ void Show_error_num(u8 error_num)
 {
 	char msg[50];
 
-	ClearWithBG((u16*)gImage_SD,90, 2, 90, 13, 1);
+	ClearWithBG((u16*)SDBitmap,90, 2, 90, 13, 1);
 	switch(error_num)
 	{
 		case 0x0:
@@ -1621,7 +1621,7 @@ int main(void) {
 		Check_FW_update(Current_FW_ver,Built_in_ver);
 	}
 	
-	DrawPic((u16*)gImage_splash, 0, 0, 240, 160, 0, 0, 1);	
+	DrawPic((u16*)splashBitmap, 0, 0, 240, 160, 0, 0, 1);	
 	CheckLanguage();	
 	CheckSwitch();
 
@@ -1734,7 +1734,7 @@ re_showfile:
 	
 	if(page_num==SD_list)
 	{
-		DrawPic((u16*)gImage_SD, 0, 0, 240, 160, 0, 0, 1);	
+		DrawPic((u16*)SDBitmap, 0, 0, 240, 160, 0, 0, 1);	
 	}
 	while(1)
 	{
@@ -1782,37 +1782,37 @@ re_showfile:
 			if(updata==1){//reshow all
 				if(page_num==SD_list)
 				{
-					ClearWithBG((u16*)gImage_SD,0, 0, 90, 20, 1);
-					ClearWithBG((u16*)gImage_SD,185+6, 3, 6*3, 16, 1);//Show_game_num
-					ClearWithBG((u16*)gImage_SD,0, 20, 240, 160-20, 1);
+					ClearWithBG((u16*)SDBitmap,0, 0, 90, 20, 1);
+					ClearWithBG((u16*)SDBitmap,185+6, 3, 6*3, 16, 1);//Show_game_num
+					ClearWithBG((u16*)SDBitmap,0, 20, 240, 160-20, 1);
 					Show_ICON_filename(show_offset,file_select,gl_show_Thumbnail&&is_GBA);
 									
 				}
 				else if(page_num==SET_win)//set windows
 				{
-					DrawPic((u16*)gImage_SET, 0, 0, 240, 160, 0, 0, 1);
+					DrawPic((u16*)SETBitmap, 0, 0, 240, 160, 0, 0, 1);
 					res =Setting_window();
 					if(res==0){
-						DrawPic((u16*)gImage_NOR, 0, 0, 240, 160, 0, 0, 1);
+						DrawPic((u16*)NORBitmap, 0, 0, 240, 160, 0, 0, 1);
 						page_num = NOR_list;//NOR
 					}
 					else{
-						DrawPic((u16*)gImage_HELP, 0, 0, 240, 160, 0, 0, 1);
+						DrawPic((u16*)HELPBitmap, 0, 0, 240, 160, 0, 0, 1);
 						page_num = HELP;//HELP
 					}
 					goto re_showfile;
 				}
 				else if(page_num==HELP)//HELP windows
 				{
-					DrawPic((u16*)gImage_HELP, 0, 0, 240, 160, 0, 0, 1);
+					DrawPic((u16*)HELPBitmap, 0, 0, 240, 160, 0, 0, 1);
 					Show_help_window();
-					DrawPic((u16*)gImage_SET, 0, 0, 240, 160, 0, 0, 1);
+					DrawPic((u16*)SETBitmap, 0, 0, 240, 160, 0, 0, 1);
 					page_num = SET_win;
 					goto re_showfile;
 				}
 				else
 				{				
-					DrawPic((u16*)gImage_NOR, 0, 0, 240, 160, 0, 0, 1);
+					DrawPic((u16*)NORBitmap, 0, 0, 240, 160, 0, 0, 1);
 					Show_ICON_filename_NOR(show_offset,file_select);							
 				}
 				Show_game_num(file_select+show_offset+1,page_num);
@@ -1821,12 +1821,12 @@ re_showfile:
 				if(page_num==NOR_list)
 				{
 					Refresh_filename_NOR(show_offset,file_select,updata);
-					ClearWithBG((u16*) gImage_NOR,185, 0, 30, 18, 1);
+					ClearWithBG((u16*) NORBitmap,185, 0, 30, 18, 1);
 				}
 				else
 				{
 					Refresh_filename(show_offset,file_select,updata,gl_show_Thumbnail&&is_GBA);
-					ClearWithBG((u16*)gImage_SD,185, 0, 30, 18, 1);
+					ClearWithBG((u16*)SDBitmap,185, 0, 30, 18, 1);
 				}
 				Show_game_num(file_select+show_offset+1,page_num );
 			}
@@ -1837,7 +1837,7 @@ re_showfile:
 					DrawPic((u16*)(pReadCache+0x10036), 120, 80, 120, 80, 0, 0, 1);//show game pic				
 				}
 				else{
-					DrawPic((u16*)(gImage_NOTFOUND), 120, 80, 120, 80, 0, 0, 1);//show game pic	
+					DrawPic((u16*)(NOTFOUNDBitmap), 120, 80, 120, 80, 0, 0, 1);//show game pic	
 				}
 			}
 			if(continue_MENU) break;
@@ -1929,7 +1929,7 @@ re_showfile:
 					file_select = 0;
 					show_offset = 0;
 					updata=1;
-					DrawPic((u16*)gImage_SD, 0, 0, 240, 160, 0, 0, 1);
+					DrawPic((u16*)SDBitmap, 0, 0, 240, 160, 0, 0, 1);
 					folder_select=1;
 				}
 				page_num = SD_list;	
@@ -1943,7 +1943,7 @@ re_showfile:
 			{			
 				if(page_num==HELP)continue;
 				page_num ++;
-				if(page_num==NOR_list)DrawPic((u16*)gImage_NOR, 0, 0, 240, 160, 0, 0, 1);
+				if(page_num==NOR_list)DrawPic((u16*)NORBitmap, 0, 0, 240, 160, 0, 0, 1);
 				updata=1;
 				folder_select=0;
 				shift = 0;
@@ -2095,7 +2095,7 @@ re_showfile:
 		}
 		
 		re_show_menu:
-		DrawPic((u16*)gImage_MENU, 56, 25, 128, 110, 0, 0, 1);//show menu pic		
+		DrawPic((u16*)MENUBitmap, 56, 25, 128, 110, 0, 0, 1);//show menu pic		
 		Show_MENU_btn();			
 		while(1)//3
 		{
@@ -2147,7 +2147,7 @@ re_showfile:
 					if(Save_num){
 						Save_num--;
 						re_menu=1;
-						DrawPic((u16*)gImage_MENU, 56, 25, 128, 110, 0, 0, 1);//show menu pic
+						DrawPic((u16*)MENUBitmap, 56, 25, 128, 110, 0, 0, 1);//show menu pic
 						Show_MENU_btn();
 					}
 				}
@@ -2158,7 +2158,7 @@ re_showfile:
 					if(Save_num<5){
 						Save_num++;	
 						re_menu=1;
-						DrawPic((u16*)gImage_MENU, 56, 25, 128, 110, 0, 0, 1);//show menu pic
+						DrawPic((u16*)MENUBitmap, 56, 25, 128, 110, 0, 0, 1);//show menu pic
 						Show_MENU_btn();
 					}
 				}

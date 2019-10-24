@@ -13,6 +13,7 @@
 #include "lang.h"
 #include "Ezcard_OP.h"
 #include "GBApatch.h"
+#include "MENU.h"
 #define DEBUG
 
 //---------------------------------------------------------------
@@ -90,7 +91,7 @@ void Chip_Erase()
 		VBlankIntrWait();		
 		VBlankIntrWait();	
 		ShowTime(NOR_list,0);
-		DrawPic((u16*)(gImage_MENU+78*128*2), 56, 90+13, 128, 13, 0, 0, 1);//show menu pic
+		DrawPic((u16*)MENUBitmap + 78*128, 56, 90+13, 128, 13, 0, 0, 1);//show menu pic
 		
 		itoa(count,msg,2);
 		DrawHZText12(msg,0,60,90+13,gl_color_text,1);

@@ -7,6 +7,7 @@ $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>dev
 endif
 
 include $(DEVKITARM)/gba_rules
+GRIT    := grit
 
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
@@ -26,6 +27,7 @@ SOURCES		:= source source/ff13c
 INCLUDES	:= include source/ff13c
 DATA		:= font
 MUSIC		:=
+GRAPHICS	:= gfx gfx/images
 
 #---------------------------------------------------------------------------------
 # options for code generation
@@ -78,6 +80,7 @@ CFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
 CPPFILES	:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.cpp)))
 SFILES		:=	$(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 BINFILES	:=	$(foreach dir,$(DATA),$(notdir $(wildcard $(dir)/*.*)))
+GFXFILES	:=	$(foreach dir,$(GRAPHICS),$(notdir $(wildcard $(dir)/*.png)))
 
 ifneq ($(strip $(MUSIC)),)
 	export AUDIOFILES	:=	$(foreach dir,$(notdir $(wildcard $(MUSIC)/*.*)),$(CURDIR)/$(MUSIC)/$(dir))
@@ -100,9 +103,11 @@ endif
 
 export OFILES_BIN := $(addsuffix .o,$(BINFILES))
 
+export OFILES_GFX := $(GFXFILES:.png=.o)
+
 export OFILES_SOURCES := $(CPPFILES:.cpp=.o) $(CFILES:.c=.o) $(SFILES:.s=.o)
  
-export OFILES := $(OFILES_BIN) $(OFILES_SOURCES)
+export OFILES := $(OFILES_BIN) $(OFILES_GFX) $(OFILES_SOURCES)
 
 export HFILES := $(addsuffix .h,$(subst .,_,$(BINFILES)))
 
@@ -163,8 +168,19 @@ soundbank.bin soundbank.h : $(AUDIOFILES)
 	@echo $(notdir $<)
 	@$(bin2o)
 
+#---------------------------------------------------------------------------------
+# Grit rules
+#---------------------------------------------------------------------------------
+# With matching grit-file
+%.s %.h	: %.png %.grit
+	$(GRIT) $< -fts
+
+# No grit-file: try using dir.grit
+%.s %.h	: %.png
+	$(GRIT) $< -fts -ff $(<D)/$(notdir $(<D)).grit
+
 -include $(DEPSDIR)/*.d
- 
+
 #---------------------------------------------------------------------------------------
 endif
 #---------------------------------------------------------------------------------------
