@@ -118,23 +118,23 @@ void DrawHZText12(const char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect
 			location = c1*12;
 			for(i=0;i<12;i++)
 			{
-				cc = ASC_DATA[location+i];
+				cc = asc126Bitmap[location+i];
 				if(cc & 0x01)
-					v[x+7+yy]=c;
-				if(cc & 0x02)
-					v[x+6+yy]=c;
-				if(cc & 0x04)
-					v[x+5+yy]=c;
-				if(cc & 0x08)
-					v[x+4+yy]=c;
-				if(cc & 0x10)
-					v[x+3+yy]=c;
-				if(cc & 0x20)
-					v[x+2+yy]=c;
-				if(cc & 0x40)
-					v[x+1+yy]=c;
-				if(cc & 0x80)
 					v[x+yy]=c;
+				if(cc & 0x02)
+					v[x+1+yy]=c;
+				if(cc & 0x04)
+					v[x+2+yy]=c;
+				if(cc & 0x08)
+					v[x+3+yy]=c;
+				if(cc & 0x10)
+					v[x+4+yy]=c;
+				if(cc & 0x20)
+					v[x+5+yy]=c;
+				if(cc & 0x40)
+					v[x+6+yy]=c;
+				if(cc & 0x80)
+					v[x+7+yy]=c;
 				yy+=240;
 			}
 			x+=6;
@@ -152,41 +152,41 @@ void DrawHZText12(const char *str, u16 len, u16 x, u16 y, u16 c, u8 isDrawDirect
 			yy = 240*y;
 			for(i=0;i<12;i++)
 			{				
-				cc = acHZK12[location+i*2];
+				cc = HZK12Bitmap[location+i*2];
 				if(cc & 0x01)
-					v[x+7+yy]=c;
-				if(cc & 0x02)
-					v[x+6+yy]=c;
-				if(cc & 0x04)
-					v[x+5+yy]=c;
-				if(cc & 0x08)
-					v[x+4+yy]=c;
-				if(cc & 0x10)
-					v[x+3+yy]=c;
-				if(cc & 0x20)
-					v[x+2+yy]=c;
-				if(cc & 0x40)
-					v[x+1+yy]=c;
-				if(cc & 0x80)
 					v[x+yy]=c;
-								
-				cc = acHZK12[location+i*2+1];
-				if(cc & 0x01)
-					v[x+15+yy]=c;
 				if(cc & 0x02)
-					v[x+14+yy]=c;
+					v[x+1+yy]=c;
 				if(cc & 0x04)
-					v[x+13+yy]=c;
+					v[x+2+yy]=c;
 				if(cc & 0x08)
-					v[x+12+yy]=c;
+					v[x+3+yy]=c;
 				if(cc & 0x10)
-					v[x+11+yy]=c;
+					v[x+4+yy]=c;
 				if(cc & 0x20)
-					v[x+10+yy]=c;
+					v[x+5+yy]=c;
 				if(cc & 0x40)
-					v[x+9+yy]=c;
+					v[x+6+yy]=c;
 				if(cc & 0x80)
+					v[x+7+yy]=c;
+								
+				cc = HZK12Bitmap[location+i*2+1];
+				if(cc & 0x01)
 					v[x+8+yy]=c;
+				if(cc & 0x02)
+					v[x+9+yy]=c;
+				if(cc & 0x04)
+					v[x+10+yy]=c;
+				if(cc & 0x08)
+					v[x+11+yy]=c;
+				if(cc & 0x10)
+					v[x+12+yy]=c;
+				if(cc & 0x20)
+					v[x+13+yy]=c;
+				if(cc & 0x40)
+					v[x+14+yy]=c;
+				if(cc & 0x80)
+					v[x+15+yy]=c;
 				yy+=240;
 			}
 			x+=12;

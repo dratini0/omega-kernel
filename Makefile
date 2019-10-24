@@ -27,7 +27,7 @@ SOURCES		:= source source/ff13c
 INCLUDES	:= include source/ff13c
 DATA		:= font
 MUSIC		:=
-GRAPHICS	:= gfx gfx/images
+GRAPHICS	:= gfx gfx/images gfx/fonts
 
 #---------------------------------------------------------------------------------
 # options for code generation
