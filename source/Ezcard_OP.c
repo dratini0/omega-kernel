@@ -10,7 +10,7 @@
 #include "Ezcard_OP.h"
 #include "ezkernel.h"
 #include "draw.h"
-#include "Newest_FW_ver.h"
+#include "newomega_top_bin.h"
 #include "reset.h"
 extern u32 FAT_table_buffer[FAT_table_size/4]EWRAM_BSS;
 static u32 crc32(const unsigned char *buf, u32 size);

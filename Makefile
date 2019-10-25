@@ -25,7 +25,7 @@ TARGET		:= ezkernel
 BUILD		:= build
 SOURCES		:= source source/ff13c
 INCLUDES	:= include source/ff13c
-DATA		:= font
+DATA		:= data
 MUSIC		:=
 GRAPHICS	:= gfx gfx/images gfx/fonts
 
@@ -164,6 +164,14 @@ soundbank.bin soundbank.h : $(AUDIOFILES)
 # This rule links in binary data with the .bin extension
 #---------------------------------------------------------------------------------
 %.bin.o	%_bin.h :	%.bin
+#---------------------------------------------------------------------------------
+	@echo $(notdir $<)
+	@$(bin2o)
+
+#---------------------------------------------------------------------------------
+# Binary rule for the .gba files
+#---------------------------------------------------------------------------------
+%.gba.o	%_gba.h :	%.gba
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
 	@$(bin2o)

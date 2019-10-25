@@ -39,8 +39,8 @@
 #include "Chinese_manual.h"
 #include "English_manual.h"
 
-#include "goomba.h"
-#include "pocketnes.h"
+#include "goomba_gba.h"
+#include "pocketnes_gba.h"
 
 
 

@@ -6,7 +6,7 @@
 
 #include "draw.h"
 #include "GBApatch.h"
-#include "gba_nes_patch.h"
+#include "gba_nes_patch_bin.h"
 #include "ezkernel.h"
 #include "reset_table.h"
 #include "lang.h"
